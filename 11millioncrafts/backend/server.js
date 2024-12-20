@@ -1,40 +1,39 @@
-// Import dependencies
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const multer = require('multer'); // For handling file uploads
+const multer = require('multer');
 require('dotenv').config();
 
-// Initialize app and middleware
+
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Serve static files from the 'uploads' directory
+
 app.use('/uploads', express.static('uploads'));
 
-// Setup multer for image upload
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Folder for storing images
+    cb(null, 'uploads/'); 
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname); // Use the original file name
+    cb(null, file.originalname); 
   },
 });
 
 const upload = multer({ storage });
 
-// Connect to MongoDB
+
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/11millioncrafts', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-// Define SKU schema and model
 const skuSchema = new mongoose.Schema({
     productName: { type: String, required: true },
     productNumber: { type: Number, required: true },
@@ -46,7 +45,7 @@ const skuSchema = new mongoose.Schema({
 
 const SKU = mongoose.model('SKU', skuSchema);
 
-// Define User schema and model
+
 const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -55,7 +54,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Define Product schema and model
+
 const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
     productId: { type: String, required: true, unique: true },
@@ -64,7 +63,7 @@ const productSchema = new mongoose.Schema({
 
 const Product = mongoose.model('Product', productSchema);
 
-// Helper function to generate SKU code
+
 const generateSKUCode = ({ productName, productNumber, vendorName, vendorNumber, cityCode }) => {
     const getShortForm = (name) => name.split(' ').map(word => word[0].toUpperCase()).join('').slice(0, 2);
     const productShort = getShortForm(productName);
@@ -72,9 +71,7 @@ const generateSKUCode = ({ productName, productNumber, vendorName, vendorNumber,
     return `MC-${productShort}${String(productNumber).padStart(2, '0')}-${vendorShort}${String(vendorNumber).padStart(2, '0')}-${String(cityCode).padStart(2, '0')}`;
 };
 
-// Routes
 
-// Register Endpoint
 app.post('/register', async (req, res) => {
   const { email, password, role } = req.body;
 
@@ -100,7 +97,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Login Endpoint
+
 app.post('/login', async (req, res) => {
   const { email, password, role } = req.body;
 
@@ -129,7 +126,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Add Product Endpoint with Image Upload
+
 app.post('/api/products', upload.single('image'), async (req, res) => {
   const { name, productId } = req.body;
 
@@ -141,7 +138,7 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
     const productData = {
       name,
       productId,
-      image: req.file ? req.file.path : null, // Save image path
+      image: req.file ? req.file.path : null, 
     };
 
     const newProduct = new Product(productData);
@@ -153,7 +150,6 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
   }
 });
 
-// Get Products Endpoint
 app.get('/inventory', async (req, res) => {
   try {
     const products = await Product.find();
@@ -164,7 +160,7 @@ app.get('/inventory', async (req, res) => {
   }
 });
 
-// Create a new SKU
+
 app.post('/api/skus', async (req, res) => {
     try {
         const { productName, productNumber, vendorName, vendorNumber, cityCode } = req.body;
@@ -180,7 +176,7 @@ app.post('/api/skus', async (req, res) => {
     }
 });
 
-// Get SKU by SKU code
+
 app.get('/api/skus/:skuCode', async (req, res) => {
     try {
         const { skuCode } = req.params;
@@ -197,6 +193,6 @@ app.get('/api/skus/:skuCode', async (req, res) => {
     }
 });
 
-// Start the server
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

@@ -31,6 +31,7 @@ function Header() {
           <li><NavLink to="/contact">Contact Us</NavLink></li>
           <li><NavLink to="/services">Services</NavLink></li>
           <li><NavLink to="/products">Products</NavLink></li>
+          <li><NavLink to="/skugen">SkuGen</NavLink></li>
           {/* Only show Form navigation if the user is an admin */}
           {isAdmin && <li><NavLink to="/form">Form</NavLink></li>}
         </ul>

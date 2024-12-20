@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './skumanager.css'; // Import the CSS file
+import './skumanager.css'; 
 
 const SkuManager = () => {
     const [formData, setFormData] = useState({
@@ -13,10 +13,11 @@ const SkuManager = () => {
     const [skus, setSkus] = useState([]);
     const [searchResult, setSearchResult] = useState(null);
 
-    // Handle form submission
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+           
             const response = await axios.post('http://localhost:5000/api/skus', formData);
             setSkus((prevSkus) => [...prevSkus, response.data]);
             setFormData({
@@ -31,7 +32,7 @@ const SkuManager = () => {
         }
     };
 
-    // Handle SKU search
+
     const handleSearch = async (skuCode) => {
         try {
             const response = await axios.get(`http://localhost:5000/api/skus/${skuCode}`);
@@ -43,7 +44,6 @@ const SkuManager = () => {
 
     return (
         <div className="sku-manager">
-            {/* Left: Form */}
             <div className="sku-form">
                 <h3>Add SKU</h3>
                 <form onSubmit={handleSubmit}>
@@ -77,11 +77,11 @@ const SkuManager = () => {
                         value={formData.cityCode}
                         onChange={(e) => setFormData({ ...formData, cityCode: e.target.value })}
                     />
-                    <button type="submit">Add SKU</button>
+                    <button type="submit">Generate SKU</button>
                 </form>
             </div>
 
-            {/* Center: Added SKUs */}
+          
             <div className="sku-list">
                 <h3>Added SKUs</h3>
                 <ul>
@@ -93,7 +93,7 @@ const SkuManager = () => {
                 </ul>
             </div>
 
-            {/* Right: Search */}
+       
             <div className="sku-search">
                 <h3>Search SKU</h3>
                 <input

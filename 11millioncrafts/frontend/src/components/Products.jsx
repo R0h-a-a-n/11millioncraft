@@ -18,11 +18,11 @@ const Product = () => {
     fetchProducts();
   }, []);
 
+  //comment
   return (
     <div className="product-container">
       <div className="product-row">
         {products.map((product) => {
-          // Replace backslashes with forward slashes for the image URL
           const imageUrl = product.image ? product.image.replace(/\\/g, '/') : ''; 
 
           return (
@@ -35,7 +35,7 @@ const Product = () => {
                 />
               )}
               <h3>{product.name}</h3>
-              <p>SKU: {product.productId}</p>
+              <p>{product.productId}</p>
             </div>
           );
         })}
