@@ -103,6 +103,7 @@ function App() {
           path="/skugen"
           element={
             <ProtectedRoute>
+              <Header/>
               <SkuManager/>
             </ProtectedRoute>
           }
