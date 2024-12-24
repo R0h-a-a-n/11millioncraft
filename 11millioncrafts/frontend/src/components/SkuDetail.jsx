@@ -29,9 +29,9 @@ const SkuDetail = () => {
     }
 
     return (
-        <div className="min-h-screen mt-[20vh] bg-gradient-to-br from-blue-100 to-purple-200 p-4">
-            <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6">
-                <button 
+        <div className="min-h-screen mt-[60vh]  p-4">
+            <div className="max-w-3xl mx-auto rounded-lg  p-6">
+                <button
                     onClick={() => navigate(-1)}
                     className="flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6"
                 >

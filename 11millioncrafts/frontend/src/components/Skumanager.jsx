@@ -25,8 +25,7 @@ const SkuManager = () => {
         formDataObj.append('vendorName', formData.vendorName);
         formDataObj.append('vendorNumber', formData.vendorNumber);
         formDataObj.append('cityCode', formData.cityCode);
-        formDataObj.append('photo', formData.photo); // File input
-    
+        formDataObj.append('photo', formData.photo);
         try {
             const response = await fetch('http://localhost:5000/api/skus', {
                 method: 'POST',
@@ -80,14 +79,14 @@ const SkuManager = () => {
     };
 
     return (
-        <div className="min-h-screen mt-[40vh] bg-gradient-to-br from-blue-100 to-purple-200 p-4">
+        <div className="min-h-screen mt-[40vh] p-4 ">
             <div className="max-w-7xl mx-auto grid gap-6 lg:grid-cols-3">
-                <div className="bg-white shadow-lg rounded-lg p-6">
-                    <h2 className="text-2xl font-semibold text-blue-600 flex items-center gap-2 mb-6">
-                        <Plus className="w-6 h-6" />
+                <div className="rounded-lg p-6">
+                    <h2 className="text-2xl font-semibold flex items-center gap-2 mb-6">
+                    <Plus className="w-6 h-6" />
                         Add SKU
-                    </h2>
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                     </h2>
+                    <form onSubmit={handleSubmit} className="space-y-4 ">
                         <input
                             type="text"
                             placeholder="Product Name"
@@ -144,20 +143,20 @@ const SkuManager = () => {
                     </form>
                 </div>
 
-                <div className="bg-white shadow-lg rounded-lg p-6">
-                    <h2 className="text-2xl font-semibold text-purple-600 flex items-center gap-2 mb-6">
-                        <Package className="w-6 h-6" />
-                        Added SKUs
-                    </h2>
+                <div className=" rounded-lg bg-white shadow-lg p-6">
                     <div className="max-h-[60vh] overflow-y-auto">
                         {filteredSkus.length > 0 ? (
                             <div className="space-y-4">
+                                 <h2 className="text-2xl font-semibold flex items-center gap-2 mb-6">
+                        <Package className="w-6 h-6" />
+                        Added SKUs
+                    </h2>
                                 {filteredSkus.map((sku, index) => (
                                     <div
                                         key={index}
                                         className="p-4 rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition duration-200"
                                     >
-                                        <span className="font-medium text-blue-600 cursor-pointer">
+                                        <span className="font-medium text-blue-600 hover:text-green-600 cursor-pointer">
                                             <h1 onClick={() => navigate(`/sku/${sku.skuCode}`)}>{sku.skuCode}</h1>
                                         </span>
                                         <p className="text-gray-600 mt-1">
@@ -172,8 +171,8 @@ const SkuManager = () => {
                     </div>
                 </div>
 
-                <div className="bg-white shadow-lg rounded-lg p-6">
-                    <h2 className="text-2xl font-semibold text-green-600 flex items-center gap-2 mb-6">
+                <div className="rounded-lg bg-white shadow-lg p-6">
+                    <h2 className="text-2xl font-semibold  flex items-center gap-2 mb-6">
                         <Search className="w-6 h-6" />
                         Search SKU
                     </h2>
