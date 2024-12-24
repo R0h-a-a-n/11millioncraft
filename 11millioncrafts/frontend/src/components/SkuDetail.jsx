@@ -29,7 +29,7 @@ const SkuDetail = () => {
     }
 
     return (
-        <div className="min-h-screen mt-[60vh]  p-4">
+        <div className="min-h-screen mt-[20vh]  p-4">
             <div className="max-w-3xl mx-auto rounded-lg  p-6">
                 <button
                     onClick={() => navigate(-1)}
