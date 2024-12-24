@@ -70,7 +70,6 @@ const SkuManager = () => {
     return (
         <div className="min-h-screen mt-[40vh] bg-gradient-to-br from-blue-100 to-purple-200 p-4">
             <div className="max-w-7xl mx-auto grid gap-6 lg:grid-cols-3">
-                {/* Add SKU Form */}
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <h2 className="text-2xl font-semibold text-blue-600 flex items-center gap-2 mb-6">
                         <Plus className="w-6 h-6" />
