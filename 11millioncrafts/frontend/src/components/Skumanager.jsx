@@ -10,7 +10,8 @@ const SkuManager = () => {
         cityCode: '',
     });
     const [skus, setSkus] = useState([]);
-    const [searchResult, setSearchResult] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredSkus, setFilteredSkus] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,6 +25,7 @@ const SkuManager = () => {
             });
             const data = await response.json();
             setSkus((prevSkus) => [...prevSkus, data]);
+            setFilteredSkus((prevSkus) => [...prevSkus, data]);
             setFormData({
                 productName: '',
                 productNumber: '',
@@ -42,6 +44,7 @@ const SkuManager = () => {
                 const response = await fetch('http://localhost:5000/getsku');
                 const data = await response.json();
                 setSkus(data);
+                setFilteredSkus(data);
             } catch (err) {
                 console.log(err);
             }
@@ -49,13 +52,18 @@ const SkuManager = () => {
         fetchSkus();
     }, []);
 
-    const handleSearch = async (skuCode) => {
-        try {
-            const response = await fetch(`http://localhost:5000/api/skus/${skuCode}`);
-            const data = await response.json();
-            setSearchResult(data);
-        } catch (error) {
-            console.error('Error searching SKU:', error.message);
+    const handleSearch = (query) => {
+        setSearchQuery(query);
+        if (query.trim() === '') {
+            setFilteredSkus(skus); // Reset to all SKUs if search is empty
+        } else {
+            const results = skus.filter(
+                (sku) =>
+                    sku.skuCode.toLowerCase().includes(query.toLowerCase()) ||
+                    sku.productName.toLowerCase().includes(query.toLowerCase()) ||
+                    sku.vendorName.toLowerCase().includes(query.toLowerCase())
+            );
+            setFilteredSkus(results);
         }
     };
 
@@ -125,9 +133,9 @@ const SkuManager = () => {
                         Added SKUs
                     </h2>
                     <div className="max-h-[60vh] overflow-y-auto">
-                        {skus.length > 0 ? (
+                        {filteredSkus.length > 0 ? (
                             <div className="space-y-4">
-                                {skus.map((sku, index) => (
+                                {filteredSkus.map((sku, index) => (
                                     <div
                                         key={index}
                                         className="p-4 rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition duration-200"
@@ -154,21 +162,12 @@ const SkuManager = () => {
                     <div className="relative mb-6">
                         <input
                             type="text"
-                            placeholder="Enter SKU Code"
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') handleSearch(e.target.value);
-                            }}
+                            placeholder="Enter SKU Code, Product Name, or Vendor Name"
+                            value={searchQuery}
+                            onChange={(e) => handleSearch(e.target.value)}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                     </div>
-                    {searchResult && (
-                        <div className="p-4 bg-green-50 border rounded-lg">
-                            <h4 className="text-lg font-medium text-green-700">Search Result:</h4>
-                            <p className="text-green-800">Product: {searchResult.productName}</p>
-                            <p className="text-green-800">Vendor: {searchResult.vendorName}</p>
-                            <p className="text-green-800">SKU: {searchResult.skuCode}</p>
-                        </div>
-                    )}
                 </div>
             </div>
         </div>
