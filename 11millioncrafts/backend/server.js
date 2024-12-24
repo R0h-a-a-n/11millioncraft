@@ -193,6 +193,17 @@ app.get('/api/skus/:skuCode', async (req, res) => {
     }
 });
 
+app.get('/getsku', async (req,res)=>{
+  try{
+    const sku = await SKU.find();
+    res.json(sku);
+  }catch(err)
+  {
+    res.status(400).json(err);
+  }
+  
+})
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

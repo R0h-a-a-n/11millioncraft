@@ -91,11 +91,12 @@ function App() {
           }
         />
         <Route
-          path="/form"
+          path="/products/form"
           element={
             <ProtectedRoute>
               <Header />
               <Form />
+
             </ProtectedRoute>
           }
         />
