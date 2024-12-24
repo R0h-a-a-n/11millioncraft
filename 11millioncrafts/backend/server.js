@@ -41,7 +41,6 @@ const skuSchema = new mongoose.Schema({
     vendorNumber: { type: Number, required: true },
     cityCode: { type: Number, required: true },
     skuCode: { type: String, required: true, unique: true },
-    photo:{type:String,required:true},
 });
 
 const SKU = mongoose.model('SKU', skuSchema);
@@ -162,35 +161,20 @@ app.get('/inventory', async (req, res) => {
 });
 
 
-app.post('/api/skus', upload.single('photo'), async (req, res) => {
-  try {
-      const { productName, productNumber, vendorName, vendorNumber, cityCode } = req.body;
+app.post('/api/skus', async (req, res) => {
+    try {
+        const { productName, productNumber, vendorName, vendorNumber, cityCode } = req.body;
+        const skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode });
 
-      if (!req.file) {
-          return res.status(400).json({ message: 'Photo is required!' });
-      }
+        const newSKU = new SKU({ productName, productNumber, vendorName, vendorNumber, cityCode, skuCode });
+        await newSKU.save();
 
-      const photoPath = req.file.path; 
-      const skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode });
-
-      const newSKU = new SKU({
-          productName,
-          productNumber,
-          vendorName,
-          vendorNumber,
-          cityCode,
-          skuCode,
-          photo: photoPath,
-      });
-
-      await newSKU.save();
-      res.status(201).json(newSKU);
-  } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Error creating SKU', error: err.message });
-  }
+        res.status(201).json(newSKU);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error creating SKU', error: err.message });
+    }
 });
-
 
 
 app.get('/api/skus/:skuCode', async (req, res) => {
@@ -219,20 +203,6 @@ app.get('/getsku', async (req,res)=>{
   }
   
 })
-
-app.get('/sku/:skuCode', async (req,res) =>{
-try{
-  
-   const {skuCode} = req.params;
-   const skudetail=await SKU.findOne({skuCode});
-   res.json(skudetail);
-}
-catch(err)
-{
-  res.json(err).status(404);
-}
-} );
-
 
 
 const PORT = process.env.PORT || 5000;
