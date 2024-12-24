@@ -9,6 +9,7 @@ const SkuManager = () => {
         vendorName: '',
         vendorNumber: '',
         cityCode: '',
+        photo: '',
     });
     const [skus, setSkus] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -34,6 +35,7 @@ const SkuManager = () => {
                 vendorName: '',
                 vendorNumber: '',
                 cityCode: '',
+                photo: '',
             });
         } catch (error) {
             console.error('Error adding SKU:', error.message);
@@ -57,7 +59,7 @@ const SkuManager = () => {
     const handleSearch = (query) => {
         setSearchQuery(query);
         if (query.trim() === '') {
-            setFilteredSkus(skus); 
+            setFilteredSkus(skus);
         } else {
             const results = skus.filter(
                 (sku) =>
@@ -72,7 +74,6 @@ const SkuManager = () => {
     return (
         <div className="min-h-screen mt-[40vh] bg-gradient-to-br from-blue-100 to-purple-200 p-4">
             <div className="max-w-7xl mx-auto grid gap-6 lg:grid-cols-3">
-                {/* Add SKU Form */}
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <h2 className="text-2xl font-semibold text-blue-600 flex items-center gap-2 mb-6">
                         <Plus className="w-6 h-6" />
@@ -119,6 +120,13 @@ const SkuManager = () => {
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         />
+                        <input
+                            type="file"
+                            value={formData.photo}
+                            onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
                         <button
                             type="submit"
                             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
@@ -128,7 +136,6 @@ const SkuManager = () => {
                     </form>
                 </div>
 
-                
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <h2 className="text-2xl font-semibold text-purple-600 flex items-center gap-2 mb-6">
                         <Package className="w-6 h-6" />
@@ -142,7 +149,9 @@ const SkuManager = () => {
                                         key={index}
                                         className="p-4 rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition duration-200"
                                     >
-                                        <span className="font-medium text-blue-600 cursor-pointer"><h1 onClick={()=>{navigate(`/sku/${sku.skuCode}`)}}>{sku.skuCode}</h1></span>
+                                        <span className="font-medium text-blue-600 cursor-pointer">
+                                            <h1 onClick={() => navigate(`/sku/${sku.skuCode}`)}>{sku.skuCode}</h1>
+                                        </span>
                                         <p className="text-gray-600 mt-1">
                                             Product: {sku.productName} | Vendor: {sku.vendorName}
                                         </p>
@@ -155,7 +164,6 @@ const SkuManager = () => {
                     </div>
                 </div>
 
-                
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <h2 className="text-2xl font-semibold text-green-600 flex items-center gap-2 mb-6">
                         <Search className="w-6 h-6" />

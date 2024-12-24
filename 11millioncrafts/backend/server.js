@@ -41,6 +41,7 @@ const skuSchema = new mongoose.Schema({
     vendorNumber: { type: Number, required: true },
     cityCode: { type: Number, required: true },
     skuCode: { type: String, required: true, unique: true },
+    photo:{type:String,required:true},
 });
 
 const SKU = mongoose.model('SKU', skuSchema);
@@ -163,10 +164,10 @@ app.get('/inventory', async (req, res) => {
 
 app.post('/api/skus', async (req, res) => {
     try {
-        const { productName, productNumber, vendorName, vendorNumber, cityCode } = req.body;
-        const skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode });
+        const { productName, productNumber, vendorName, vendorNumber, cityCode,photo } = req.body;
+        const skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode,photo });
 
-        const newSKU = new SKU({ productName, productNumber, vendorName, vendorNumber, cityCode, skuCode });
+        const newSKU = new SKU({ productName, productNumber, vendorName, vendorNumber, cityCode, skuCode,photo });
         await newSKU.save();
 
         res.status(201).json(newSKU);
@@ -204,7 +205,7 @@ app.get('/getsku', async (req,res)=>{
   
 })
 
-app.get(`/sku/:skuCode`, async (req,res) =>{
+app.get('/sku/:skuCode', async (req,res) =>{
 try{
   
    const {skuCode} = req.params;
@@ -216,6 +217,7 @@ catch(err)
   res.json(err).status(404);
 }
 } );
+
 
 
 const PORT = process.env.PORT || 5000;
