@@ -10,6 +10,7 @@ const SkuDetail = () => {
         vendorName: '',
         vendorNumber: '',
         cityCode: '',
+        photo:'',
     });
 
     useEffect(() => {
@@ -56,6 +57,7 @@ const SkuDetail = () => {
                                     <div className="text-xs text-gray-500">City Code</div>
                                     <div className="text-lg font-semibold text-gray-800">{sku.cityCode || 'N/A'}</div>
                                 </div>
+                                <div className=""><img src="${sku.photo}" alt="" /></div>
                             </div>
                         </div>
                 

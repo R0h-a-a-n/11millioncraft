@@ -18,14 +18,21 @@ const SkuManager = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
+        const formDataObj = new FormData();
+        formDataObj.append('productName', formData.productName);
+        formDataObj.append('productNumber', formData.productNumber);
+        formDataObj.append('vendorName', formData.vendorName);
+        formDataObj.append('vendorNumber', formData.vendorNumber);
+        formDataObj.append('cityCode', formData.cityCode);
+        formDataObj.append('photo', formData.photo); // File input
+    
         try {
             const response = await fetch('http://localhost:5000/api/skus', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+                body: formDataObj,
             });
+    
             const data = await response.json();
             setSkus((prevSkus) => [...prevSkus, data]);
             setFilteredSkus((prevSkus) => [...prevSkus, data]);
@@ -41,6 +48,7 @@ const SkuManager = () => {
             console.error('Error adding SKU:', error.message);
         }
     };
+    
 
     useEffect(() => {
         const fetchSkus = async () => {
@@ -122,11 +130,11 @@ const SkuManager = () => {
                         />
                         <input
                             type="file"
-                            value={formData.photo}
-                            onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
+                            onChange={(e) => setFormData({ ...formData, photo: e.target.files[0] })}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         />
+
                         <button
                             type="submit"
                             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
