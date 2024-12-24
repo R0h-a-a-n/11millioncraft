@@ -5,24 +5,24 @@ import './Form.css';
 const Form = () => {
   const [productName, setProductName] = useState('');
   const [productId, setProductId] = useState('');
-  const [image, setImage] = useState(null); // State for the image file
+  const [image, setImage] = useState(null);
   const [message, setMessage] = useState('');
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // Store the selected image
+    setImage(e.target.files[0]); 
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Create a FormData object to send the data, including the image
+
     const formData = new FormData();
     formData.append('name', productName);
     formData.append('productId', productId);
-    if (image) formData.append('image', image); // Only append if an image is selected
+    if (image) formData.append('image', image); 
 
     try {
-      // Send the product data to the server including the image
+ 
       const response = await axios.post('http://localhost:5000/api/products', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Set the correct content type for file uploads

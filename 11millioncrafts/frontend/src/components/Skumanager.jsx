@@ -18,7 +18,7 @@ const SkuManager = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         const formDataObj = new FormData();
         formDataObj.append('productName', formData.productName);
         formDataObj.append('productNumber', formData.productNumber);
@@ -31,7 +31,7 @@ const SkuManager = () => {
                 method: 'POST',
                 body: formDataObj,
             });
-    
+
             const data = await response.json();
             setSkus((prevSkus) => [...prevSkus, data]);
             setFilteredSkus((prevSkus) => [...prevSkus, data]);
@@ -47,7 +47,6 @@ const SkuManager = () => {
             console.error('Error adding SKU:', error.message);
         }
     };
-    
 
     useEffect(() => {
         const fetchSkus = async () => {
@@ -79,61 +78,62 @@ const SkuManager = () => {
     };
 
     return (
-        <div className="min-h-screen mt-[40vh] p-4 ">
+        <div className="min-h-screen mt-[50vh] p-4">
             <div className="max-w-7xl mx-auto grid gap-6 lg:grid-cols-3">
                 <div className="rounded-lg p-6">
-                    <h2 className="text-2xl font-semibold flex items-center gap-2 mb-6">
-                    <Plus className="w-6 h-6" />
+                    <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
+                        <Plus className="w-6 h-6" />
                         Add SKU
-                     </h2>
-                    <form onSubmit={handleSubmit} className="space-y-4 ">
-                        <input
-                            type="text"
-                            placeholder="Product Name"
-                            value={formData.productName}
-                            onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                        />
-                        <input
-                            type="number"
-                            placeholder="Product Number"
-                            value={formData.productNumber}
-                            onChange={(e) => setFormData({ ...formData, productNumber: e.target.value })}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                        />
-                        <input
-                            type="text"
-                            placeholder="Vendor Name"
-                            value={formData.vendorName}
-                            onChange={(e) => setFormData({ ...formData, vendorName: e.target.value })}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                        />
-                        <input
-                            type="number"
-                            placeholder="Vendor Number"
-                            value={formData.vendorNumber}
-                            onChange={(e) => setFormData({ ...formData, vendorNumber: e.target.value })}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                        />
-                        <input
-                            type="number"
-                            placeholder="City Code"
-                            value={formData.cityCode}
-                            onChange={(e) => setFormData({ ...formData, cityCode: e.target.value })}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                        />
-                        <input
-                            type="file"
-                            onChange={(e) => setFormData({ ...formData, photo: e.target.files[0] })}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                        />
-
+                    </h2>
+                    <form onSubmit={handleSubmit} className="space-y-3">
+                        <div className="grid gap-3">
+                            <input
+                                type="text"
+                                placeholder="Product Name"
+                                value={formData.productName}
+                                onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                            <input
+                                type="number"
+                                placeholder="Product Number"
+                                value={formData.productNumber}
+                                onChange={(e) => setFormData({ ...formData, productNumber: e.target.value })}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                            <input
+                                type="text"
+                                placeholder="Vendor Name"
+                                value={formData.vendorName}
+                                onChange={(e) => setFormData({ ...formData, vendorName: e.target.value })}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                            <input
+                                type="number"
+                                placeholder="Vendor Number"
+                                value={formData.vendorNumber}
+                                onChange={(e) => setFormData({ ...formData, vendorNumber: e.target.value })}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                            <input
+                                type="number"
+                                placeholder="City Code"
+                                value={formData.cityCode}
+                                onChange={(e) => setFormData({ ...formData, cityCode: e.target.value })}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                            <input
+                                type="file"
+                                onChange={(e) => setFormData({ ...formData, photo: e.target.files[0] })}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                        </div>
                         <button
                             type="submit"
                             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
@@ -143,14 +143,14 @@ const SkuManager = () => {
                     </form>
                 </div>
 
-                <div className=" rounded-lg bg-white shadow-lg p-6">
+                <div className="rounded-lg bg-white shadow-lg p-6">
                     <div className="max-h-[60vh] overflow-y-auto">
                         {filteredSkus.length > 0 ? (
                             <div className="space-y-4">
-                                 <h2 className="text-2xl font-semibold flex items-center gap-2 mb-6">
-                        <Package className="w-6 h-6" />
-                        Added SKUs
-                    </h2>
+                                <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
+                                    <Package className="w-6 h-6" />
+                                    Added SKUs
+                                </h2>
                                 {filteredSkus.map((sku, index) => (
                                     <div
                                         key={index}
@@ -172,7 +172,7 @@ const SkuManager = () => {
                 </div>
 
                 <div className="rounded-lg bg-white shadow-lg p-6">
-                    <h2 className="text-2xl font-semibold  flex items-center gap-2 mb-6">
+                    <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
                         <Search className="w-6 h-6" />
                         Search SKU
                     </h2>
