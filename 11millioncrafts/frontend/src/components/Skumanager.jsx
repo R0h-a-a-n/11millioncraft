@@ -55,7 +55,7 @@ const SkuManager = () => {
     const handleSearch = (query) => {
         setSearchQuery(query);
         if (query.trim() === '') {
-            setFilteredSkus(skus); // Reset to all SKUs if search is empty
+            setFilteredSkus(skus); 
         } else {
             const results = skus.filter(
                 (sku) =>
@@ -126,7 +126,7 @@ const SkuManager = () => {
                     </form>
                 </div>
 
-                {/* Added SKUs */}
+                
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <h2 className="text-2xl font-semibold text-purple-600 flex items-center gap-2 mb-6">
                         <Package className="w-6 h-6" />
@@ -153,7 +153,7 @@ const SkuManager = () => {
                     </div>
                 </div>
 
-                {/* Search SKU */}
+                
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <h2 className="text-2xl font-semibold text-green-600 flex items-center gap-2 mb-6">
                         <Search className="w-6 h-6" />
