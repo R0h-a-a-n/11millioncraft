@@ -204,6 +204,19 @@ app.get('/getsku', async (req,res)=>{
   
 })
 
+app.get(`/sku/:skuCode`, async (req,res) =>{
+try{
+  
+   const {skuCode} = req.params;
+   const skudetail=await SKU.findOne({skuCode});
+   res.json(skudetail);
+}
+catch(err)
+{
+  res.json(err).status(404);
+}
+} );
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Search, Plus, Package } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const SkuManager = () => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const SkuManager = () => {
     const [skus, setSkus] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredSkus, setFilteredSkus] = useState([]);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -140,7 +142,7 @@ const SkuManager = () => {
                                         key={index}
                                         className="p-4 rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition duration-200"
                                     >
-                                        <span className="font-medium text-blue-600">{sku.skuCode}</span>
+                                        <span className="font-medium text-blue-600 cursor-pointer"><h1 onClick={()=>{navigate(`/sku/${sku.skuCode}`)}}>{sku.skuCode}</h1></span>
                                         <p className="text-gray-600 mt-1">
                                             Product: {sku.productName} | Vendor: {sku.vendorName}
                                         </p>

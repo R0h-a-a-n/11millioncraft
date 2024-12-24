@@ -11,6 +11,7 @@ import Products from './components/Products';
 import Header from './components/Header';
 import Form from './components/Form';
 import SkuManager from './components/Skumanager';
+import SkuDetail from './components/SkuDetail';
 
 function App() {
   // Track login state and persist it
@@ -106,6 +107,15 @@ function App() {
             <ProtectedRoute>
               <Header/>
               <SkuManager/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sku/:skuCode"
+          element={
+            <ProtectedRoute>
+              <Header/>
+              <SkuDetail/>
             </ProtectedRoute>
           }
         />
