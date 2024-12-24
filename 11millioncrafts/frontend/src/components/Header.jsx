@@ -32,7 +32,7 @@ function Header() {
           <li><NavLink to="/services">Services</NavLink></li>
           <li><NavLink to="/products">Products</NavLink></li>
           <li><NavLink to="/skugen">SkuGen</NavLink></li>
-          {isAdmin && <li><NavLink to="/form">Form</NavLink></li>}
+          {isAdmin && <li><NavLink to="/products/form">Form</NavLink></li>}
         </ul>
       </nav>
       <button className="logout-button" onClick={handleLogout}>Logout</button>
