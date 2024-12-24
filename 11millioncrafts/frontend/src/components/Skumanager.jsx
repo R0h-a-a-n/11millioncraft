@@ -9,6 +9,7 @@ const SkuManager = () => {
         vendorName: '',
         vendorNumber: '',
         cityCode: '',
+        photo: '',
     });
     const [skus, setSkus] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -17,14 +18,21 @@ const SkuManager = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
+        const formDataObj = new FormData();
+        formDataObj.append('productName', formData.productName);
+        formDataObj.append('productNumber', formData.productNumber);
+        formDataObj.append('vendorName', formData.vendorName);
+        formDataObj.append('vendorNumber', formData.vendorNumber);
+        formDataObj.append('cityCode', formData.cityCode);
+        formDataObj.append('photo', formData.photo); // File input
+    
         try {
             const response = await fetch('http://localhost:5000/api/skus', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+                body: formDataObj,
             });
+    
             const data = await response.json();
             setSkus((prevSkus) => [...prevSkus, data]);
             setFilteredSkus((prevSkus) => [...prevSkus, data]);
@@ -34,11 +42,13 @@ const SkuManager = () => {
                 vendorName: '',
                 vendorNumber: '',
                 cityCode: '',
+                photo: '',
             });
         } catch (error) {
             console.error('Error adding SKU:', error.message);
         }
     };
+    
 
     useEffect(() => {
         const fetchSkus = async () => {
@@ -57,7 +67,7 @@ const SkuManager = () => {
     const handleSearch = (query) => {
         setSearchQuery(query);
         if (query.trim() === '') {
-            setFilteredSkus(skus); 
+            setFilteredSkus(skus);
         } else {
             const results = skus.filter(
                 (sku) =>
@@ -118,6 +128,13 @@ const SkuManager = () => {
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         />
+                        <input
+                            type="file"
+                            onChange={(e) => setFormData({ ...formData, photo: e.target.files[0] })}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
+
                         <button
                             type="submit"
                             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
@@ -127,7 +144,6 @@ const SkuManager = () => {
                     </form>
                 </div>
 
-                
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <h2 className="text-2xl font-semibold text-purple-600 flex items-center gap-2 mb-6">
                         <Package className="w-6 h-6" />
@@ -141,7 +157,9 @@ const SkuManager = () => {
                                         key={index}
                                         className="p-4 rounded-lg bg-gray-50 shadow-sm hover:shadow-md transition duration-200"
                                     >
-                                        <span className="font-medium text-blue-600 cursor-pointer"><h1 onClick={()=>{navigate(`/sku/${sku.skuCode}`)}}>{sku.skuCode}</h1></span>
+                                        <span className="font-medium text-blue-600 cursor-pointer">
+                                            <h1 onClick={() => navigate(`/sku/${sku.skuCode}`)}>{sku.skuCode}</h1>
+                                        </span>
                                         <p className="text-gray-600 mt-1">
                                             Product: {sku.productName} | Vendor: {sku.vendorName}
                                         </p>
@@ -154,7 +172,6 @@ const SkuManager = () => {
                     </div>
                 </div>
 
-                
                 <div className="bg-white shadow-lg rounded-lg p-6">
                     <h2 className="text-2xl font-semibold text-green-600 flex items-center gap-2 mb-6">
                         <Search className="w-6 h-6" />
