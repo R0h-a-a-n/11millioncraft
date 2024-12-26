@@ -1,16 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../index.css';
+
 
 function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="landing-page">
-      <h2>Welcome to 11million Crafts</h2>
+    <div className="landing-page border border-black rounded-lg p-10">
+     <p className='text-4xl text-black mb-4'>Welcome to 11MillionCraft</p>
       <div className="button-group">
-        <button onClick={() => navigate('/signup')}>New User</button>
-        <button onClick={() => navigate('/login')}>Login</button>
+        <button className='bg-purple-200 mr-2 p-2 rounded-lg hover:bg-purple-500' onClick={() => navigate('/signup')}>New User</button>
+        <button className='bg-purple-200 p-2 rounded-lg hover:bg-purple-500' onClick={() => navigate('/login')}>Login</button>
       </div>
     </div>
   );

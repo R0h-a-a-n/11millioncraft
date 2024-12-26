@@ -56,6 +56,9 @@ const SkuDetail = () => {
                             <h2 className="font-medium text-gray-700">Vendor Details</h2>
                             <p className="text-gray-600">Name: {skuDetail.vendorName}</p>
                             <p className="text-gray-600">Number: {skuDetail.vendorNumber}</p>
+                            {skuDetail.vendorprice &&
+                              <p className='text-gray-600'>VendorPrice:₹{skuDetail.vendorprice}</p>
+                            }
                         </div>
 
                         <div className="bg-gray-50 p-4 rounded-lg">

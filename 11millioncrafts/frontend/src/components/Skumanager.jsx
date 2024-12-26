@@ -10,12 +10,12 @@ const SkuManager = () => {
         vendorNumber: '',
         cityCode: '',
         photo: '',
+        vendorprice:'',
     });
     const [skus, setSkus] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredSkus, setFilteredSkus] = useState([]);
     const navigate = useNavigate();
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -26,6 +26,7 @@ const SkuManager = () => {
         formDataObj.append('vendorNumber', formData.vendorNumber);
         formDataObj.append('cityCode', formData.cityCode);
         formDataObj.append('photo', formData.photo);
+        formDataObj.append('vendorprice',formData.vendorprice);
         try {
             const response = await fetch('http://localhost:5000/api/skus', {
                 method: 'POST',
@@ -78,14 +79,14 @@ const SkuManager = () => {
     };
 
     return (
-        <div className="min-h-screen mt-[50vh] p-4">
-            <div className="max-w-7xl mx-auto grid gap-6 lg:grid-cols-3">
-                <div className="rounded-lg p-6">
-                    <h2 className="text-2xl font-semibold  mt-[-20vh] flex items-center gap-2 mb-4">
-                        <Plus className="w-6 h-6 "/>
+        <div className="min-h-screen mt-[30vh] w-[218vh]">
+            <div className="max-w-7xl mx-auto grid gap-6 p-10   lg:grid-cols-3">
+                <div className="rounded-lg p-6 ">
+                    <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
+                        <Plus className="w-6 h-6" />
                         Add SKU
                     </h2>
-                    <form onSubmit={handleSubmit} className="space-y-3">
+                    <form onSubmit={handleSubmit} className="space-y-9 p-10 bg-white/20">
                         <div className="grid gap-3">
                             <input
                                 type="text"
@@ -128,6 +129,14 @@ const SkuManager = () => {
                                 required
                             />
                             <input
+                                type="number"
+                                placeholder="VendorPrice"
+                                value={formData.vendorprice}
+                                onChange={(e) => setFormData({ ...formData, vendorprice: e.target.value })}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                required
+                            />
+                            <input
                                 type="file"
                                 onChange={(e) => setFormData({ ...formData, photo: e.target.files[0] })}
                                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -143,7 +152,7 @@ const SkuManager = () => {
                     </form>
                 </div>
 
-                <div className="rounded-lg bg-white shadow-lg p-6">
+                <div className="rounded-lg bg-white/20 shadow-lg p-6">
                     <div className="max-h-[60vh] overflow-y-auto">
                         {filteredSkus.length > 0 ? (
                             <div className="space-y-4">
@@ -171,7 +180,7 @@ const SkuManager = () => {
                     </div>
                 </div>
 
-                <div className="rounded-lg bg-white shadow-lg p-6">
+                <div className="rounded-lg bg-white/20 shadow-lg p-6">
                     <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
                         <Search className="w-6 h-6" />
                         Search SKU

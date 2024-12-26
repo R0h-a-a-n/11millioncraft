@@ -32,6 +32,7 @@ const skuSchema = new mongoose.Schema({
   cityCode: { type: Number, required: true },
   skuCode: { type: String, required: true, unique: true },
   photo: { type: String, required: true },
+  vendorprice:{type:Number},
 });
 
 const SKU = mongoose.model('SKU', skuSchema);
@@ -110,10 +111,10 @@ app.get('/inventory', async (req, res) => {
 
 app.post('/api/skus', upload.single('photo'), async (req, res) => {
   try {
-    const { productName, productNumber, vendorName, vendorNumber, cityCode } = req.body;
+    const { productName, productNumber, vendorName, vendorNumber, cityCode,vendorprice } = req.body;
     if (!req.file) return res.status(400).json({ message: 'Photo is required!' });
     const skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode });
-    const newSKU = new SKU({ productName, productNumber, vendorName, vendorNumber, cityCode, skuCode, photo: req.file.path });
+    const newSKU = new SKU({ productName, productNumber, vendorName, vendorNumber, cityCode, skuCode, photo: req.file.path,vendorprice });
     await newSKU.save();
     res.status(201).json(newSKU);
   } catch (err) {
