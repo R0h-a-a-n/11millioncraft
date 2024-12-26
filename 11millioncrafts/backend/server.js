@@ -150,5 +150,16 @@ app.get('/sku/:skuCode', async (req, res) => {
   }
 });
 
+
+app.get('/vendor/:vendorName/products', async (req,res) =>{
+ try{
+      const vendordetail = await SKU.find({vendorName:req.params.vendorName});
+       res.json(vendordetail);
+
+ }catch(err)
+ {
+  res.status(400).json('error came so sad');
+ }
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
