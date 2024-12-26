@@ -27,15 +27,17 @@ const Product = () => {
 
           return (
             <div className="product-card" key={product._id}>
-              {imageUrl && (
-                <img
-                  src={`http://localhost:5000/${imageUrl}`}
-                  alt={product.name}
-                  className="product-image"
-                />
-              )}
-              <h3>{product.name}</h3>
-              <p>{product.productId}</p>
+                {product.photo && (
+                            <img
+                                src={`http://localhost:5000/${product.photo}`}
+                                alt={product.productName}
+                                className="w-full h-auto rounded-lg shadow-sm"
+                                onError={(e) => {
+                                    e.target.src = '/api/placeholder/400/300';
+                                    console.error('Error loading image');
+                                }}/>)}
+              <h3>{product.productName}</h3>
+              <p>{product.skuCode}</p>
             </div>
           );
         })}

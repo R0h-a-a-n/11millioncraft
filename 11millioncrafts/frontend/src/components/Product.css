@@ -30,7 +30,7 @@ header {
   .product-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Create 4 equal columns */
-    gap: 10px; /* Adds spacing between the cards */
+    gap: 10px; 
     width: 100%;
     box-sizing: border-box;
     padding-bottom: 20px;
@@ -52,7 +52,7 @@ header {
     z-index:-1;
   }
   
-  /* Image inside the product card */
+  
   .product-image {
     width: 100%;
     height: auto;
@@ -60,7 +60,7 @@ header {
     margin-bottom: 10px;
   }
   
-  /* Product name and SKU */
+
   .product-card h3 {
     margin: 0;
     font-size: 18px;
