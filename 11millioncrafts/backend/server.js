@@ -68,33 +68,9 @@ const generateSKUCode = ({ productName, productNumber, vendorName, vendorNumber,
   return `MC-${productShort}${String(productNumber).padStart(2, '0')}-${vendorShort}${String(vendorNumber).padStart(2, '0')}-${String(cityCode).padStart(2, '0')}`;
 };
 
-app.post('/register', async (req, res) => {
-  const { email, password, role } = req.body;
-  if (!email || !password || !role) return res.status(400).json({ message: 'All fields are required!' });
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPassword, role });
-    await newUser.save();
-    res.status(201).json({ message: 'User registered successfully!' });
-  } catch (error) {
-    res.status(error.code === 11000 ? 400 : 500).json({ message: error.code === 11000 ? 'Email already exists!' : 'Server error!' });
-  }
-});
 
-app.post('/login', async (req, res) => {
-  const { email, password, role } = req.body;
-  if (!email || !password || !role) return res.status(400).json({ message: 'All fields are required!' });
-  try {
-    const user = await User.findOne({ email, role });
-    if (!user) return res.status(404).json({ message: 'Invalid email or role!' });
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) return res.status(401).json({ message: 'Invalid credentials!' });
-    const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.SECRET_KEY, { expiresIn: '1h' });
-    res.status(200).json({ message: 'Login successful!', token, role: user.role });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error!' });
-  }
-});
+
+
 
 app.post('/api/products', upload.single('image'), async (req, res) => {
   const { name, productId } = req.body;
