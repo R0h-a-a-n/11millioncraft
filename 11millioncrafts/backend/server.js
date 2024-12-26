@@ -54,9 +54,17 @@ const productSchema = new mongoose.Schema({
 const Product = mongoose.model('Product', productSchema);
 
 const generateSKUCode = ({ productName, productNumber, vendorName, vendorNumber, cityCode }) => {
-  const getShortForm = name => name.split(' ').map(word => word[0].toUpperCase()).join('').slice(0, 2);
+  const getShortForm = name => {
+    const words = name.split(' ');
+    if (words.length >= 2) {
+      return (words[0][0] + words[1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  };
+
   const productShort = getShortForm(productName);
   const vendorShort = getShortForm(vendorName);
+
   return `MC-${productShort}${String(productNumber).padStart(2, '0')}-${vendorShort}${String(vendorNumber).padStart(2, '0')}-${String(cityCode).padStart(2, '0')}`;
 };
 
@@ -102,7 +110,7 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
 
 app.get('/inventory', async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await SKU.find();
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching products' });
