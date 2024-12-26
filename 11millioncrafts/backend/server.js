@@ -179,7 +179,7 @@ app.put('/edit/:skuCode', async (req,res)=>{
   const updatedData = req.body;
 try{
       const { productName, productNumber, vendorName, vendorNumber, cityCode,vendorprice } = req.body;
-      updatedData.skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode });
+      updatedData.skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode, vendorprice });
       const update = await SKU.findOneAndUpdate({skuCode},updatedData,{new:true});
       if(!update)
       {

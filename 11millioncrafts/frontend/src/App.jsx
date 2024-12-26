@@ -13,6 +13,8 @@ import Form from './components/Form';
 import SkuManager from './components/Skumanager';
 import SkuDetail from './components/SkuDetail';
 import Edit from './components/Edit';
+import { ToastContainer,toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   // Track login state and persist it

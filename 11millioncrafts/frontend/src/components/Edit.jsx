@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 const Edit = () => {
@@ -42,11 +44,14 @@ const Edit = () => {
             delete updatedData.skuCode; 
 
             const response = await axios.put(`http://localhost:5000/edit/${skuCode}`, updatedData);
-            alert('SKU updated successfully!');
-            navigate(-1); 
+            toast.success('SKU updated successfully!');
+            
+            setTimeout(()=>{
+                navigate(`/sku/${skuCode}`); 
+            },5000);
         } catch (error) {
             console.error('Error updating SKU:', error);
-            alert('Failed to update SKU.');
+            toast.error('SKU update error');
         }
     };
 
@@ -148,6 +153,7 @@ const Edit = () => {
                     Save Changes
                 </button>
             </form>
+            <ToastContainer/>
         </div>
     );
 };
