@@ -30,7 +30,7 @@ const skuSchema = new mongoose.Schema({
   vendorName: { type: String, required: true },
   vendorNumber: { type: Number, required: true },
   cityCode: { type: Number, required: true },
-  skuCode: { type: String, required: true, unique: true },
+  skuCode: { type: String, required:true, unique:true },
   photo: { type: String, required: true },
   vendorprice:{type:Number},
 });
@@ -161,5 +161,45 @@ app.get('/vendor/:vendorName/products', async (req,res) =>{
   res.status(400).json('error came so sad');
  }
 });
+
+app.get('/edit/:skuCode', async (req,res) =>{
+
+  try{
+    const skuCode=await SKU.findOne({skuCode:req.params.skuCode});
+    res.json(skuCode);
+  }catch(err){
+    res.status(400).json(err);
+  }
+
+});
+
+app.put('/edit/:skuCode', async (req,res)=>{
+
+  const {skuCode} = req.params;
+  const updatedData = req.body;
+try{
+      const { productName, productNumber, vendorName, vendorNumber, cityCode,vendorprice } = req.body;
+      updatedData.skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode });
+      const update = await SKU.findOneAndUpdate({skuCode},updatedData,{new:true});
+      if(!update)
+      {
+        res.status(400).json("enter valid details");
+      }
+      res.json(update);
+     
+
+
+}catch(err)
+{
+  res.status(400).json('error');
+}
+ 
+
+});
+
+
+
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

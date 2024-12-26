@@ -119,7 +119,7 @@ function App() {
           }
         />
          <Route
-          path="/edit"
+          path="/edit/:skuCode"
           element={
             <ProtectedRoute>
               <Header/>
