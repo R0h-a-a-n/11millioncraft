@@ -6,15 +6,17 @@ function Home() {
   const handleLogout = () => {
     localStorage.removeItem('token'); 
     localStorage.removeItem('role');
-    navigate('/'); // Redirect to Landing Page
-    window.location.reload(); // Refresh to reset the app state
+    navigate('/');
+    window.location.reload();
   };
   return (
-    <div className="page-content">
-      <h2>Welcome to 11millioncrafts!</h2>
-      <p>Your one-stop solution for corporate gifting needs.</p>
-      <button className="logout-button" onClick={handleLogout}>logout</button>
+    <>
+    <div className="border border-purple-500 rounded-lg p-10 bg-gradient-to-r from-purple-300 to-transparent">
+      <h2 className='mb-3 text-[10vh] animate-slidein [--slidein-delay:900ms]'>Welcome to 11millioncraft!</h2>
+      <p className='text-black text-[9vh] animate-slidein [--slidein-delay:500ms]'>Your one-stop solution for corporate gifting needs.</p>
     </div>
+    </>
+    
     
   );
 }
