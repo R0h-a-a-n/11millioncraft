@@ -12,27 +12,26 @@ import Header from './components/Header';
 import Form from './components/Form';
 import SkuManager from './components/Skumanager';
 import SkuDetail from './components/SkuDetail';
+import Edit from './components/Edit';
 
 function App() {
   // Track login state and persist it
   const [isLoggedIn, setIsLoggedIn] = useState(
-    () => localStorage.getItem('isLoggedIn') === 'true' // Retrieve state from localStorage
+    () => localStorage.getItem('isLoggedIn') === 'true' 
   );
 
   useEffect(() => {
-    // Update localStorage whenever isLoggedIn changes
+
     localStorage.setItem('isLoggedIn', isLoggedIn);
   }, [isLoggedIn]);
 
-  // Check login state on component mount
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Check for a token in localStorage
+    const token = localStorage.getItem('token'); 
     if (token) {
       setIsLoggedIn(true);
     }
   }, []);
 
-  // Protected Route Component
   const ProtectedRoute = ({ children }) => {
     return isLoggedIn ? children : <Navigate to="/home" />;
   };
@@ -40,12 +39,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
+
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
 
-        {/* Protected Routes */}
+
         <Route
           path="/home"
           element={
@@ -116,6 +115,15 @@ function App() {
             <ProtectedRoute>
               <Header/>
               <SkuDetail/>
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/edit"
+          element={
+            <ProtectedRoute>
+              <Header/>
+              <Edit/>
             </ProtectedRoute>
           }
         />
