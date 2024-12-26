@@ -42,42 +42,6 @@ function Header() {
             </li>
             <li>
               <NavLink 
-                to="/about"
-                className={({ isActive }) => 
-                  `text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                    isActive ? 'border-b-2 border-white' : ''
-                  }`
-                }
-              >
-                About Us
-              </NavLink>
-            </li>
-            <li>
-              <NavLink 
-                to="/contact"
-                className={({ isActive }) => 
-                  `text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                    isActive ? 'border-b-2 border-white' : ''
-                  }`
-                }
-              >
-                Contact Us
-              </NavLink>
-            </li>
-            <li>
-              <NavLink 
-                to="/services"
-                className={({ isActive }) => 
-                  `text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                    isActive ? 'border-b-2 border-white' : ''
-                  }`
-                }
-              >
-                Services
-              </NavLink>
-            </li>
-            <li>
-              <NavLink 
                 to="/products"
                 className={({ isActive }) => 
                   `text-white hover:text-purple-200 transition-colors duration-200 font-medium ${

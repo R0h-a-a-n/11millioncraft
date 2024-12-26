@@ -4,9 +4,6 @@ import LandingPage from './components/Landingpage';
 import Signup from './components/signup';
 import Login from './components/login';
 import Home from './components/Home';
-import About from './components/About';
-import Contact from './components/Contact';
-import Services from './components/Services';
 import Products from './components/Products';
 import Header from './components/Header';
 import Form from './components/Form';
@@ -15,6 +12,7 @@ import SkuDetail from './components/SkuDetail';
 import Edit from './components/Edit';
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Superadmin from './components/superadmin';
 
 function App() {
   // Track login state and persist it
@@ -56,33 +54,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/about"
-          element={
-            <ProtectedRoute>
-              <Header />
-              <About />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/contact"
-          element={
-            <ProtectedRoute>
-              <Header />
-              <Contact />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/services"
-          element={
-            <ProtectedRoute>
-              <Header />
-              <Services />
-            </ProtectedRoute>
-          }
-        />
+
         <Route
           path="/products"
           element={
@@ -129,7 +101,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/supe"
+          element={
+            <ProtectedRoute>
+              <Header/>
+              <Superadmin/>
+            </ProtectedRoute>
+          }
+        />
         </Routes>
+        
     </Router>
   );
 }

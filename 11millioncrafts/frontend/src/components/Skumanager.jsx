@@ -79,7 +79,7 @@ const SkuManager = () => {
     };
 
     return (
-        <div className="min-h-screen mt-[30vh] w-[218vh]">
+        <div className="min-h-screen mt-[30vh] w-[100%] max-w-screen">
             <div className="max-w-7xl mx-auto grid gap-6 p-10   lg:grid-cols-3">
                 <div className="rounded-lg p-6 ">
                     <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
