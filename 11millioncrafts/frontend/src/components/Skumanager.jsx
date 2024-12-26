@@ -81,8 +81,8 @@ const SkuManager = () => {
         <div className="min-h-screen mt-[50vh] p-4">
             <div className="max-w-7xl mx-auto grid gap-6 lg:grid-cols-3">
                 <div className="rounded-lg p-6">
-                    <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
-                        <Plus className="w-6 h-6" />
+                    <h2 className="text-2xl font-semibold  mt-[-20vh] flex items-center gap-2 mb-4">
+                        <Plus className="w-6 h-6 "/>
                         Add SKU
                     </h2>
                     <form onSubmit={handleSubmit} className="space-y-3">
