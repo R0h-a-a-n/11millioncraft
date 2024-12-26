@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 require('dotenv').config();
+const User = require('./models/User');
 
 const app = express();
 app.use(express.json());
@@ -37,13 +38,6 @@ const skuSchema = new mongoose.Schema({
 
 const SKU = mongoose.model('SKU', skuSchema);
 
-const userSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, required: true },
-});
-
-const User = mongoose.model('User', userSchema);
 
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -181,6 +175,17 @@ try{
 
 });
 
+app.post('/adduser', async (req,res) =>{
+  try{
+    const {email,password}=req.body;
+    const newUser= new User({email,password});
+    await newUser.save();
+    res.status(200).json(newUser);
+  }catch(err)
+  {
+    res.json(err);
+  }
+})
 
 
 
