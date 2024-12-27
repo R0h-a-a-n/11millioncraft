@@ -288,5 +288,19 @@ app.post('/addsuper',checksuperadmin, async (req,res)=>{
 
 });
 
+
+app.post('/skudelete', async (req,res) =>{
+  try{
+    const {_id} = req.body; 
+    const del = await SKU.findByIdAndDelete(_id);
+    res.status(200).json('deleted');
+
+  }catch(err)
+  {
+    res.status(400).json(err);
+  }
+
+})
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
