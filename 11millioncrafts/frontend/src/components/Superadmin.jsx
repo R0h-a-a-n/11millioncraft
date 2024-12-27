@@ -64,21 +64,27 @@ const SuperAdmin = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="p-4">
+      <div className="flex justify-between mt-[20vh] items-center mb-6">
         <h1 className="text-2xl font-bold">Super Admin Panel</h1>
         <button
           onClick={() => navigate('/signup')}
-          className="shadow-lg bg-green-400 rounded-lg p-4 hover:bg-sky-400 transition-colors duration-300"
+          className="shadow-lg bg-green-400 mr-[-75vh] rounded-lg p-4 hover:bg-sky-400 transition-colors duration-300"
         >
           Add Admin
+        </button>
+        <button
+          onClick={() => navigate('/superlogin')}
+          className="shadow-lg bg-sky-400 rounded-lg p-4 hover:bg-sky-400 transition-colors duration-300"
+        >
+          Add SuperAdmin
         </button>
       </div>
 
       {users.length === 0 ? (
         <p className="text-gray-500">No users found</p>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="">
           <table className="w-[150vh] h-[50vh] bg-white shadow-md rounded-lg overflow-hidden">
             <thead className="bg-gray-100">
               <tr>
@@ -100,7 +106,7 @@ const SuperAdmin = () => {
                   className="hover:bg-gray-50 transition-colors duration-200"
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {user.name || 'N/A'}
+                    {user.username || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {user.email || 'N/A'}

@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 require('dotenv').config();
 const User = require('./models/User');
+const SuperSchema = require('./models/SuperAdmin');
 
 const app = express();
 app.use(express.json());
@@ -210,29 +211,44 @@ app.post('/adduser', async (req, res) => {
 app.post('/checkuser', async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required!' });
+    }
+    const superAdmin = await SuperSchema.findOne({ email });
+    if (superAdmin) {
+      const isValidSuperAdminPassword = await bcrypt.compare(password, superAdmin.password);
+      if (!isValidSuperAdminPassword) {
+        return res.status(400).json({ message: 'Invalid credentials for superadmin' });
+      }
+      const token = jwt.sign(
+        { id: superAdmin._id, email: superAdmin.email, issuperadmin: true },
+        process.env.SECRET_KEY,
+        { expiresIn: '1h' }
+      );
+
+      return res.status(200).json({ message: 'Superadmin login successful', token });
+    }
     const user = await User.findOne({ email });
-    const issuperadmin = email === 'vinoth@gmail.com';
     if (!user) {
-      console.error(`User not found for email: ${email}`);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-    const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) {
-      console.error(`Invalid password attempt for email: ${email}`);
+    const isValidUserPassword = await bcrypt.compare(password, user.password);
+    if (!isValidUserPassword) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
     const token = jwt.sign(
-      { id: user._id, email: user.email, issuperadmin },
+      { id: user._id, email: user.email, issuperadmin: false },
       process.env.SECRET_KEY,
-      { expiresIn: '1h' } 
+      { expiresIn: '1h' }
     );
-    console.log(`Login successful for email: ${email}`);
-    res.status(200).json({ message: 'Login successful', token });
+    return res.status(200).json({ message: 'Login successful', token });
   } catch (err) {
     console.error('Error during login:', err.message);
     res.status(500).json({ message: 'Internal server error', error: err.message });
   }
 });
+
 
 app.get('/superadmin', checksuperadmin, async (req, res) => {
   try {
@@ -253,6 +269,23 @@ app.delete('/:_id', async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: 'Error deleting user', error: err.message });
   }
+});
+
+app.post('/addsuper',checksuperadmin, async (req,res)=>{
+
+  try {
+    const { email, password} = req.body;
+    if (!email || !password ) {
+      return res.status(400).json({ message: 'Email and  password are required!' });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new SuperSchema({ email, password: hashedPassword });
+    await newUser.save();
+    res.status(200).json({ message: 'User created successfully!', user: { email } });
+  } catch (err) {
+    res.status(500).json({ message: 'Error creating user', error: err.message });
+  }
+
 });
 
 const PORT = process.env.PORT || 5000;

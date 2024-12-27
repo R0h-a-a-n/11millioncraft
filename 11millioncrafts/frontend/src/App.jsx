@@ -13,6 +13,7 @@ import Edit from './components/Edit';
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Superadmin from './components/superadmin';
+import Superlogin from './components/Superlogin';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -106,6 +107,14 @@ function App() {
             <ProtectedRoute>
               <Header/>
               <Superadmin/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/addsuper"
+          element={
+            <ProtectedRoute>
+              <Superlogin/>
             </ProtectedRoute>
           }
         />

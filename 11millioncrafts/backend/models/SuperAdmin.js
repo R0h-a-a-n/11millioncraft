@@ -15,5 +15,4 @@ const SuperSchema=new mongoose.Schema({
     
 });
 
-
-export default SuperSchema;
+module.exports = mongoose.model('Super',SuperSchema);
