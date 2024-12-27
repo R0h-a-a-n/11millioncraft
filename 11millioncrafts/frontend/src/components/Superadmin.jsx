@@ -17,21 +17,31 @@ const SuperAdmin = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('http://localhost:5000/getinfo');
-      
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/superadmin', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
       if (Array.isArray(response.data)) {
         setUsers(response.data);
+        setError(null); 
       } else {
         throw new Error('Expected array of users from API');
       }
-    } catch (error) {
-      console.error('Error:', error);
-      setError(error.message);
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message); 
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setIsLoading(false);
     }
   };
-
+  
+  
 
   useEffect(() => {
     fetchData();
@@ -48,7 +58,7 @@ const SuperAdmin = () => {
   if (error) {
     return (
       <div className="p-4 text-red-500">
-        <p>Error: {error}</p>
+        <p className='text-3xl text-red-400'>{error}</p>
       </div>
     );
   }

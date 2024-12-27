@@ -19,6 +19,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/11millioncrafts', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -31,14 +32,12 @@ const skuSchema = new mongoose.Schema({
   vendorName: { type: String, required: true },
   vendorNumber: { type: Number, required: true },
   cityCode: { type: Number, required: true },
-  skuCode: { type: String, required:true, unique:true },
+  skuCode: { type: String, required: true, unique: true },
   photo: { type: String, required: true },
-  vendorprice:{type:Number},
+  vendorprice: { type: Number },
 });
 
 const SKU = mongoose.model('SKU', skuSchema);
-
-
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   productId: { type: String, required: true, unique: true },
@@ -46,7 +45,6 @@ const productSchema = new mongoose.Schema({
 });
 
 const Product = mongoose.model('Product', productSchema);
-
 const generateSKUCode = ({ productName, productNumber, vendorName, vendorNumber, cityCode }) => {
   const getShortForm = name => {
     const words = name.split(' ');
@@ -61,9 +59,27 @@ const generateSKUCode = ({ productName, productNumber, vendorName, vendorNumber,
 
   return `MC-${productShort}${String(productNumber).padStart(2, '0')}-${vendorShort}${String(vendorNumber).padStart(2, '0')}-${String(cityCode).padStart(2, '0')}`;
 };
+const checksuperadmin = (req, res, next) => {
+  const token = req.header('Authorization')?.split(' ')[1]; 
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
 
-
-
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    if (decoded.issuperadmin) {
+      next();
+    } else {
+      return res.status(403).json({ message: 'Forbidden: Permission Denied' });
+    }
+  } catch (err) {
+    console.error('JWT Error:', err);
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token expired' });
+    }
+    return res.status(400).json({ message: 'Access Denied' });
+  }
+};
 
 
 app.post('/api/products', upload.single('image'), async (req, res) => {
@@ -89,10 +105,21 @@ app.get('/inventory', async (req, res) => {
 
 app.post('/api/skus', upload.single('photo'), async (req, res) => {
   try {
-    const { productName, productNumber, vendorName, vendorNumber, cityCode,vendorprice } = req.body;
+    const { productName, productNumber, vendorName, vendorNumber, cityCode, vendorprice } = req.body;
     if (!req.file) return res.status(400).json({ message: 'Photo is required!' });
+
     const skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode });
-    const newSKU = new SKU({ productName, productNumber, vendorName, vendorNumber, cityCode, skuCode, photo: req.file.path,vendorprice });
+    const newSKU = new SKU({
+      productName,
+      productNumber,
+      vendorName,
+      vendorNumber,
+      cityCode,
+      skuCode,
+      photo: req.file.path,
+      vendorprice,
+    });
+
     await newSKU.save();
     res.status(201).json(newSKU);
   } catch (err) {
@@ -128,64 +155,52 @@ app.get('/sku/:skuCode', async (req, res) => {
   }
 });
 
-
-app.get('/vendor/:vendorName/products', async (req,res) =>{
- try{
-      const vendordetail = await SKU.find({vendorName:req.params.vendorName});
-       res.json(vendordetail);
-
- }catch(err)
- {
-  res.status(400).json('error came so sad');
- }
+app.get('/vendor/:vendorName/products', async (req, res) => {
+  try {
+    const vendordetail = await SKU.find({ vendorName: req.params.vendorName });
+    res.json(vendordetail);
+  } catch (err) {
+    res.status(400).json('error came so sad');
+  }
 });
 
-app.get('/edit/:skuCode', async (req,res) =>{
-
-  try{
-    const skuCode=await SKU.findOne({skuCode:req.params.skuCode});
+app.get('/edit/:skuCode', async (req, res) => {
+  try {
+    const skuCode = await SKU.findOne({ skuCode: req.params.skuCode });
     res.json(skuCode);
-  }catch(err){
+  } catch (err) {
     res.status(400).json(err);
   }
-
 });
 
-app.put('/edit/:skuCode', async (req,res)=>{
-
-  const {skuCode} = req.params;
+app.put('/edit/:skuCode', async (req, res) => {
+  const { skuCode } = req.params;
   const updatedData = req.body;
-try{
-      const { productName, productNumber, vendorName, vendorNumber, cityCode,vendorprice } = req.body;
-      updatedData.skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode, vendorprice });
-      const update = await SKU.findOneAndUpdate({skuCode},updatedData,{new:true});
-      if(!update)
-      {
-        res.status(400).json("enter valid details");
-      }
-      res.json(update);
-     
 
+  try {
+    const { productName, productNumber, vendorName, vendorNumber, cityCode, vendorprice } = req.body;
+    updatedData.skuCode = generateSKUCode({ productName, productNumber, vendorName, vendorNumber, cityCode, vendorprice });
 
-}catch(err)
-{
-  res.status(400).json('error');
-}
- 
-
+    const update = await SKU.findOneAndUpdate({ skuCode }, updatedData, { new: true });
+    if (!update) {
+      res.status(400).json('Enter valid details');
+    }
+    res.json(update);
+  } catch (err) {
+    res.status(400).json('Error');
+  }
 });
+
 
 app.post('/adduser', async (req, res) => {
   try {
     const { email, password, username } = req.body;
-
     if (!email || !password || !username) {
       return res.status(400).json({ message: 'Email, password, and username are required!' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ email, password: hashedPassword, username });
     await newUser.save();
-
     res.status(200).json({ message: 'User created successfully!', user: { email, username } });
   } catch (err) {
     res.status(500).json({ message: 'Error creating user', error: err.message });
@@ -196,59 +211,49 @@ app.post('/checkuser', async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+    const issuperadmin = email === 'vinoth@gmail.com';
     if (!user) {
+      console.error(`User not found for email: ${email}`);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-
-    
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
+      console.error(`Invalid password attempt for email: ${email}`);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-
-    
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, email: user.email, issuperadmin },
       process.env.SECRET_KEY,
-      { expiresIn: '1h' }
+      { expiresIn: '1h' } 
     );
-
+    console.log(`Login successful for email: ${email}`);
     res.status(200).json({ message: 'Login successful', token });
   } catch (err) {
-    console.error('Error during login:', err);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Error during login:', err.message);
+    res.status(500).json({ message: 'Internal server error', error: err.message });
   }
 });
 
-app.get('/getinfo', async (req,res)=>{
-    
-  try{ 
+app.get('/superadmin', checksuperadmin, async (req, res) => {
+  try {
     const response = await User.find();
+    console.log('Fetched users successfully');
     res.status(200).json(response);
-  }catch(err)
-  {
-    res.status(400).json(err);
+  } catch (err) {
+    console.error('Error fetching users:', err.message);
+    res.status(400).json({ message: 'Error fetching users', error: err.message });
   }
-   
-
 });
 
-app.delete('/:_id', async (req,res) =>{
-
-  try{
-
-    const {_id} = req.params;
-    const message = await User.findByIdAndDelete({_id});
-    res.status(200).json({message:'deleted'});
-  }catch(err)
-  {
-    res.json(400).json(err);
+app.delete('/:_id', async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const message = await User.findByIdAndDelete({ _id });
+    res.status(200).json({ message: 'User deleted' });
+  } catch (err) {
+    res.status(400).json({ message: 'Error deleting user', error: err.message });
   }
-    
-    
-
 });
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

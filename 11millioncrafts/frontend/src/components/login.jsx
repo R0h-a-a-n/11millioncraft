@@ -15,8 +15,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/checkuser', form);
-      if(response.data.message)
+      if(response.data.token)
       {
+        localStorage.setItem('token',response.data.token);
         navigate('/products');
       }
      
