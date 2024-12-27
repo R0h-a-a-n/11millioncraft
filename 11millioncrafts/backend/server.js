@@ -175,19 +175,79 @@ try{
 
 });
 
-app.post('/adduser', async (req,res) =>{
-  try{
-    const {email,password}=req.body;
-    const newUser= new User({email,password});
+app.post('/adduser', async (req, res) => {
+  try {
+    const { email, password, username } = req.body;
+
+    if (!email || !password || !username) {
+      return res.status(400).json({ message: 'Email, password, and username are required!' });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ email, password: hashedPassword, username });
     await newUser.save();
-    res.status(200).json(newUser);
+
+    res.status(200).json({ message: 'User created successfully!', user: { email, username } });
+  } catch (err) {
+    res.status(500).json({ message: 'Error creating user', error: err.message });
+  }
+});
+
+app.post('/checkuser', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.SECRET_KEY,
+      { expiresIn: '1h' }
+    );
+
+    res.status(200).json({ message: 'Login successful', token });
+  } catch (err) {
+    console.error('Error during login:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.get('/getinfo', async (req,res)=>{
+    
+  try{ 
+    const response = await User.find();
+    res.status(200).json(response);
   }catch(err)
   {
-    res.json(err);
+    res.status(400).json(err);
   }
-})
+   
 
+});
 
+app.delete('/:_id', async (req,res) =>{
+
+  try{
+
+    const {_id} = req.params;
+    const message = await User.findByIdAndDelete({_id});
+    res.status(200).json({message:'deleted'});
+  }catch(err)
+  {
+    res.json(400).json(err);
+  }
+    
+    
+
+});
 
 
 const PORT = process.env.PORT || 5000;

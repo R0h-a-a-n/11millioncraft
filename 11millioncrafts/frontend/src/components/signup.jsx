@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Ensure axios is installed
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [form, setForm] = useState({
     email: '',
     password: '',
+    username:'',
   });
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,11 +19,21 @@ const Signup = () => {
     } catch (error) {
       console.error('Error adding user:', error);
     }
+    navigate('/superadmin')
   };
 
   return (
     <div className='shadow-lg'>
       <form onSubmit={handleSubmit} className='bg-black/20'>
+      <label htmlFor="name" className='text-2xl'>Username</label>
+      <input
+          type="text"
+          id="name"
+          className='w-[50vh] rounded-lg p-4 mb-[5vh]'
+          placeholder="Enter name"
+          value={form.username}
+          onChange={(e) => setForm({ ...form, username: e.target.value })}
+        />
         <label htmlFor="mail" className='text-2xl'>Email</label>
         <input
           type="email"
