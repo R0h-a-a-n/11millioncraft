@@ -289,7 +289,7 @@ app.post('/addsuper', async (req,res)=>{
 });
 
 
-app.post('/skudelete', async (req,res) =>{
+app.post('/skudelete',checksuperadmin, async (req,res) =>{
   try{
     const {_id} = req.body; 
     const del = await SKU.findByIdAndDelete(_id);

@@ -42,10 +42,12 @@ const Edit = () => {
         try {
             const updatedData = { ...formData }; 
             delete updatedData.skuCode; 
-
-            const response = await axios.put(`http://localhost:5000/edit/${skuCode}`, updatedData);
-            toast.success('SKU updated successfully!');
-            
+            const token = localStorage.getItem('token');
+            if(token)
+            {
+                const response = await axios.put(`http://localhost:5000/edit/${skuCode}`, updatedData);
+                toast.success('SKU updated successfully!');
+            }
             setTimeout(()=>{
                 navigate(`/sku/${skuCode}`); 
             },5000);

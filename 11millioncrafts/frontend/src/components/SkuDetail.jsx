@@ -31,18 +31,36 @@ const SkuDetail = () => {
    checksuperadmin();
 },[]);
 
-    const handledelete = async (_id) =>{
-        try{
-            const delres = await axios.post('http://localhost:5000/skudelete',{_id});
-            if(delres)
-            {
-                alert('deleted');
-            }
-        }catch(err)
+const handledelete = async (_id) => {
+    try {
+        
+      const token = localStorage.getItem('token'); 
+      if (!token) {
+        alert('No token found. Please login again.');
+        return;
+      }
+  
+      const delres = await axios.post(
+        'http://localhost:5000/skudelete',
+        { _id }, 
         {
-            console.log(err);
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
         }
+      );
+  
+      if (delres.status === 200) {
+        alert('Deleted successfully');
+      } else {
+        alert('Failed to delete. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error deleting SKU:', err.message);
+      alert('An error occurred while deleting. Please try again.');
     }
+  };
+  
     useEffect(() => {
         const fetchSkuDetail = async () => {
             try {
