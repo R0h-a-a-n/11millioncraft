@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios'; 
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Superlogin = () => {
   const [form, setForm] = useState({
     email: '',
     password: '',
-    username:'',
   });
 
   const navigate = useNavigate();
@@ -14,13 +13,9 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/checkuser', form);
-      if(response.data.token)
-      {
-        localStorage.setItem('token',response.data.token);
-        navigate('/products');
-      }
-     
+      const response = await axios.post('http://localhost:5000/addsuper', form);
+      console.log(response.data);
+      navigate('/superadmin');
     } catch (error) {
       console.error('Error adding user:', error);
     }
@@ -52,7 +47,7 @@ const Login = () => {
   type="submit"
   className="bg-gradient-to-r from-indigo-900 to-transparent"
 >
-  Login
+  Create
 </button>
 
       </form>
@@ -60,4 +55,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Superlogin;

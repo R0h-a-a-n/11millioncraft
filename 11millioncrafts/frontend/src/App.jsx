@@ -13,9 +13,9 @@ import Edit from './components/Edit';
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Superadmin from './components/superadmin';
+import Superlogin from './components/Superlogin';
 
 function App() {
-  // Track login state and persist it
   const [isLoggedIn, setIsLoggedIn] = useState(
     () => localStorage.getItem('isLoggedIn') === 'true' 
   );
@@ -40,7 +40,7 @@ function App() {
     <Router>
       <Routes>
 
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
 
@@ -102,11 +102,19 @@ function App() {
           }
         />
         <Route
-          path="/supe"
+          path="/superadmin"
           element={
             <ProtectedRoute>
               <Header/>
               <Superadmin/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/addsuper"
+          element={
+            <ProtectedRoute>
+              <Superlogin/>
             </ProtectedRoute>
           }
         />
