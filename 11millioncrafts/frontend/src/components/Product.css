@@ -64,13 +64,13 @@ header {
 /* Image container - improved image handling */
 .product-card img {
   width: 100%;
-  height: 200px; /* Fixed height for consistency */
+  height: 200px; 
   object-fit: contain; /* Ensures image maintains aspect ratio */
   border-radius: 8px;
   margin-bottom: 15px;
 }
 
-/* Product title styling */
+
 .product-card h3 {
   margin: 0 0 8px 0;
   font-size: 18px;
@@ -78,29 +78,29 @@ header {
   font-weight: 600;
 }
 
-/* Product details styling */
+
 .product-card p {
   font-size: 14px;
   color: #666;
   margin: 0;
 }
 
-/* Added media query for responsiveness */
+
 @media screen and (max-width: 1200px) {
   .product-row {
-      grid-template-columns: repeat(3, 1fr); /* 3 columns on smaller screens */
+      grid-template-columns: repeat(3, 1fr); 
   }
 }
 
 @media screen and (max-width: 900px) {
   .product-row {
-      grid-template-columns: repeat(2, 1fr); /* 2 columns on even smaller screens */
+      grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media screen and (max-width: 600px) {
   .product-row {
-      grid-template-columns: 1fr; /* Single column on mobile */
+      grid-template-columns: 1fr; 
   }
   
   .product-container {
