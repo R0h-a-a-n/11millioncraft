@@ -12,7 +12,7 @@ import SkuDetail from './components/SkuDetail';
 import Edit from './components/Edit';
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Superadmin from './components/superadmin';
+import Superadmin from './components/Superadmin';
 import Superlogin from './components/Superlogin';
 
 function App() {

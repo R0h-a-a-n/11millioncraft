@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Product.css';//product page
+import './Product.css';
 import { useNavigate } from 'react-router-dom';
 
 const Product = () => {
@@ -18,34 +18,37 @@ const Product = () => {
     };
 
     fetchProducts();
-
-
-  
   }, []);
+
+  // Add this new function to handle navigation
+  const handleProductClick = (skuCode) => {
+    navigate(`/sku/${skuCode}`);
+  };
+
   return (
     <div className="product-container">
       <div className="product-row">
-        {products.map((product) => {
-          const imageUrl = product.image ? product.image.replace(/\\/g, '/') : ''; 
-
-          return (
-            <div className="product-card" key={product._id}>
-                {product.photo && (
-                            <img
-                                src={`http://localhost:5000/${product.photo}`}
-                                alt={product.productName}
-                                className="w-full h-auto rounded-lg shadow-sm"
-                                onError={(e) => {
-                                    e.target.src = '/api/placeholder/400/300';
-                                    console.error('Error loading image');
-                                }}/>)}
-              <h3 onClick={()=>{navigate('/superadmin')}} >{product.productName}</h3>
-              <p>
-                {product.skuCode}
-              </p>
-            </div>
-          );
-        })}
+        {products.map((product) => (
+          <div 
+            className="product-card" 
+            key={product._id}
+            onClick={() => handleProductClick(product.skuCode)} // Add this onClick handler
+          >
+            {product.photo && (
+              <img
+                src={`http://localhost:5000/${product.photo}`}
+                alt={product.productName}
+                className="w-full h-auto rounded-lg shadow-sm"
+                onError={(e) => {
+                  e.target.src = '/api/placeholder/400/300';
+                  console.error('Error loading image');
+                }}
+              />
+            )}
+            <h3>{product.productName}</h3>
+            <p>{product.skuCode}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
