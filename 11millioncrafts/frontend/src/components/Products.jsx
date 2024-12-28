@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './Product.css';//product page
+import { useNavigate } from 'react-router-dom';
 
 const Product = () => {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -16,9 +18,10 @@ const Product = () => {
     };
 
     fetchProducts();
-  }, []);
 
-  //comment
+
+  
+  }, []);
   return (
     <div className="product-container">
       <div className="product-row">
@@ -36,8 +39,10 @@ const Product = () => {
                                     e.target.src = '/api/placeholder/400/300';
                                     console.error('Error loading image');
                                 }}/>)}
-              <h3>{product.productName}</h3>
-              <p>{product.skuCode}</p>
+              <h3 onClick={()=>{navigate('/superadmin')}} >{product.productName}</h3>
+              <p>
+                {product.skuCode}
+              </p>
             </div>
           );
         })}
