@@ -271,7 +271,7 @@ app.delete('/:_id', async (req, res) => {
   }
 });
 
-app.post('/addsuper',checksuperadmin, async (req,res)=>{
+app.post('/addsuper', async (req,res)=>{
 
   try {
     const { email, password} = req.body;

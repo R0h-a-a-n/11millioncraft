@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer,toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SuperAdmin = () => {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ const SuperAdmin = () => {
     const del = await axios.delete(`http://localhost:5000/${_id}`);
     if(del.data.message)
     {
+      toast.success('User deleted successfully');
       fetchData();
     }
   }
@@ -74,7 +77,7 @@ const SuperAdmin = () => {
           Add Admin
         </button>
         <button
-          onClick={() => navigate('/superlogin')}
+          onClick={() => navigate('/addsuper')}
           className="shadow-lg bg-sky-400 rounded-lg p-4 hover:bg-sky-400 transition-colors duration-300"
         >
           Add SuperAdmin
@@ -123,6 +126,7 @@ const SuperAdmin = () => {
           </table>
         </div>
       )}
+      <ToastContainer/>
     </div>
   );
 };

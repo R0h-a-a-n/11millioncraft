@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios'; 
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -18,7 +20,17 @@ const Login = () => {
       if(response.data.token)
       {
         localStorage.setItem('token',response.data.token);
-        navigate('/products');
+        const token = localStorage.getItem('token');
+        const decoded  = jwtDecode(token);
+        if(decoded.issuperadmin)
+        {
+          navigate('/superadmin');
+        }
+        else
+        {
+          navigate('/products');
+        }
+
       }
      
     } catch (error) {

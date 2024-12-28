@@ -1,15 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, Package, MapPin, Truck, Building, Tag, Calendar } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 
 const SkuDetail = () => {
     const [skuDetail, setSkuDetail] = useState(null);
     const [vendorproducts, setVendorproducts] = useState([]);
+    const [Issuperadmin,setIssuperadmin] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const { skuCode } = useParams();
     const navigate = useNavigate();
+    useEffect(()=>{const checksuperadmin = () =>{
+                  
+          const token = localStorage.getItem('token');
+          if(token)
+          {
+            try{
+                 const decoded = jwtDecode(token);
+                 setIssuperadmin(decoded.issuperadmin);
+            }catch(err)
+            {
+                console.log(err);
+                setIssuperadmin(false);
+            }
+          }
 
+
+    }
+   checksuperadmin();
+},[]);
 
     const handledelete = async (_id) =>{
         try{
@@ -92,7 +112,7 @@ const SkuDetail = () => {
                             <h2 className="font-medium text-gray-700">Vendor Details</h2>
                             <p className="text-gray-600">Name: {skuDetail.vendorName}</p>
                             <p className="text-gray-600">Number: {skuDetail.vendorNumber}</p>
-                            {skuDetail.vendorprice && (
+                            {Issuperadmin && skuDetail.vendorprice && (
                                 <p className="text-gray-600">Vendor Price: ₹{skuDetail.vendorprice}</p>
                             )}
                         </div>
@@ -159,7 +179,7 @@ const SkuDetail = () => {
                                                             <p className="text-gray-600">
                                                                 Product Number: {SKU.productNumber}
                                                             </p>
-                                                            {SKU.vendorprice && (
+                                                            {Issuperadmin && SKU.vendorprice && (
                                                                 <p className="text-gray-600">
                                                                     Vendor Price: ₹{SKU.vendorprice}
                                                                 </p>
