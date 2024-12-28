@@ -1,6 +1,5 @@
-/* Product.css */
 
-/* Header styling - kept as is since it works well */
+
 header {
   background-color: #FF5733;
   color: white;
@@ -14,30 +13,30 @@ header {
   box-sizing: border-box;
 }
 
-/* Main container for products - improved scrolling and spacing */
+
 .product-container {
   margin-top: 250px;
-  padding: 20px 40px; /* Increased horizontal padding for better spacing */
+  padding: 20px 40px; 
   display: flex;
   flex-direction: column;
   gap: 20px;
-  min-height: calc(100vh - 250px); /* Ensures full height minus header */
+  min-height: calc(100vh - 250px); 
   overflow-y: auto;
-  position: relative; /* Added for proper z-index handling */
-  z-index: 1; /* Ensures content appears above background */
+  position: relative;
+  z-index: 1;
 }
 
-/* Product grid layout - maintains 4 columns with improved responsiveness */
+
 .product-row {
   display: grid;
-  grid-template-columns: repeat(4, minmax(200px, 1fr)); /* Minimum card width of 200px */
-  gap: 20px; /* Increased gap for better visual separation */
+  grid-template-columns: repeat(4, minmax(200px, 1fr)); 
+  gap: 20px; 
   width: 100%;
   box-sizing: border-box;
   padding-bottom: 20px;
 }
 
-/* Individual product card - enhanced styling and hover effects */
+
 .product-card {
   background-color: #fff;
   border-radius: 10px;
@@ -50,27 +49,26 @@ header {
   box-sizing: border-box;
   text-align: center;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer; /* Added to show card is clickable */
-  position: relative; /* Added for proper z-index handling */
-  z-index: 2; /* Ensures cards appear above container */
+  cursor: pointer;
+  position: relative;
+  z-index: 2; 
 }
 
-/* Added hover effect for better interaction feedback */
+
 .product-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Image container - improved image handling */
+
 .product-card img {
   width: 100%;
-  height: 200px; /* Fixed height for consistency */
-  object-fit: contain; /* Ensures image maintains aspect ratio */
+  height: 200px; 
+  object-fit: contain; 
   border-radius: 8px;
   margin-bottom: 15px;
 }
 
-/* Product title styling */
 .product-card h3 {
   margin: 0 0 8px 0;
   font-size: 18px;
@@ -78,29 +76,27 @@ header {
   font-weight: 600;
 }
 
-/* Product details styling */
 .product-card p {
   font-size: 14px;
   color: #666;
   margin: 0;
 }
 
-/* Added media query for responsiveness */
 @media screen and (max-width: 1200px) {
   .product-row {
-      grid-template-columns: repeat(3, 1fr); /* 3 columns on smaller screens */
+      grid-template-columns: repeat(3, 1fr); 
   }
 }
 
 @media screen and (max-width: 900px) {
   .product-row {
-      grid-template-columns: repeat(2, 1fr); /* 2 columns on even smaller screens */
+      grid-template-columns: repeat(2, 1fr); 
   }
 }
 
 @media screen and (max-width: 600px) {
   .product-row {
-      grid-template-columns: 1fr; /* Single column on mobile */
+      grid-template-columns: 1fr;
   }
   
   .product-container {
