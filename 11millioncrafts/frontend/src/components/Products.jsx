@@ -26,7 +26,7 @@ const Product = () => {
   };
 
   return (
-    <div className="product-container">
+    <div className="product-container w-[230vh]">
       <div className="product-row">
         {products.map((product) => (
           <div 
