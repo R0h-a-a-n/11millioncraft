@@ -74,7 +74,7 @@ const SuperAdmin = () => {
           Add Admin
         </button>
         <button
-          onClick={() => navigate('/superlogin')}
+          onClick={() => navigate('/addsuper')}
           className="shadow-lg bg-sky-400 rounded-lg p-4 hover:bg-sky-400 transition-colors duration-300"
         >
           Add SuperAdmin

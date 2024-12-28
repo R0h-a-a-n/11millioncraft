@@ -250,7 +250,7 @@ app.post('/checkuser', async (req, res) => {
 });
 
 
-app.get('/superadmin', checksuperadmin, async (req, res) => {
+app.get('/superadmin', checksuperadmin,async (req, res) => {
   try {
     const response = await User.find();
     console.log('Fetched users successfully');
@@ -271,7 +271,7 @@ app.delete('/:_id', async (req, res) => {
   }
 });
 
-app.post('/addsuper',checksuperadmin, async (req,res)=>{
+app.post('/addsuper', checksuperadmin,async (req,res)=>{
 
   try {
     const { email, password} = req.body;
