@@ -6,6 +6,7 @@ const Superlogin = () => {
   const [form, setForm] = useState({
     email: '',
     password: '',
+    username:'',
   });
   const [token, setToken] = useState(''); 
   const navigate = useNavigate();
@@ -39,6 +40,17 @@ const Superlogin = () => {
   return (
     <div className="shadow-lg">
       <form onSubmit={handleSubmit} className="bg-black/20">
+      <label htmlFor="mail" className="text-2xl">
+          Username
+        </label>
+        <input
+          type="text"
+          id="name"
+          placeholder="Enter Superadmin name"
+          className="w-[50vh] rounded-lg p-4 mb-[5vh]"
+          value={form.username}
+          onChange={(e) => setForm({ ...form, username: e.target.value })}
+        />
         <label htmlFor="mail" className="text-2xl">
           Email
         </label>

@@ -274,12 +274,12 @@ app.delete('/:_id', async (req, res) => {
 app.post('/addsuper',checksuperadmin, async (req,res)=>{
 
   try {
-    const { email, password} = req.body;
-    if (!email || !password ) {
+    const { email, password,username} = req.body;
+    if (!email || !password|| !username ) {
       return res.status(400).json({ message: 'Email and  password are required!' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new SuperSchema({ email, password: hashedPassword });
+    const newUser = new SuperSchema({ email, password: hashedPassword,username });
     await newUser.save();
     res.status(200).json({ message: 'User created successfully!', user: { email } });
   } catch (err) {
