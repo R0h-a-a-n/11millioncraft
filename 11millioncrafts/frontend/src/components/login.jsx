@@ -41,7 +41,8 @@ const Login = () => {
 
   return (
     <div className='shadow-lg'>
-      <form onSubmit={handleSubmit} className='bg-black/20'>
+      <div className=' p-[100vh] bg-gradient-to-r from-gray-900 to-transparent  backdrop-blur-lg'>
+      <form onSubmit={handleSubmit} className="bg-white/20">
         <label htmlFor="mail" className='text-2xl'>Email</label>
         <input
           type="email"
@@ -68,6 +69,8 @@ const Login = () => {
 </button>
 
       </form>
+      </div>
+  
     </div>
   );
 };

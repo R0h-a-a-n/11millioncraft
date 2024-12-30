@@ -30,7 +30,6 @@ function Header() {
     <Disclosure as="nav" className="bg-gray-800 mb-[90vh] fixed w-full top-0 left-0 z-50 backdrop-blur-md border-b border-white/10">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8" id="height">
         <div className="relative flex h-16 items-center justify-between">
-          {/* Mobile Menu Button */}
           <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
             <DisclosureButton
               className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
