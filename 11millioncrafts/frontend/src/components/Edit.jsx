@@ -140,7 +140,7 @@ const Edit = () => {
                 <div>
                     <label className="block text-sm font-medium text-gray-600">Vendor Price</label>
                     <input
-                        type="number"
+                        type="text"
                         name="vendorprice"
                         value={formData.vendorprice}
                         onChange={handleChange}

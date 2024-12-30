@@ -8,9 +8,7 @@ const Superlogin = () => {
     password: '',
     username:'',
   });
-  const [token, setToken] = useState(''); 
   const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

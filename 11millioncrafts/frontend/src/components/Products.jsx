@@ -20,7 +20,7 @@ const Product = () => {
     fetchProducts();
   }, []);
 
-  // Add this new function to handle navigation
+
   const handleProductClick = (skuCode) => {
     navigate(`/sku/${skuCode}`);
   };
@@ -32,7 +32,7 @@ const Product = () => {
           <div 
             className="product-card" 
             key={product._id}
-            onClick={() => handleProductClick(product.skuCode)} // Add this onClick handler
+            onClick={() => handleProductClick(product.skuCode)}
           >
             {product.photo && (
               <img

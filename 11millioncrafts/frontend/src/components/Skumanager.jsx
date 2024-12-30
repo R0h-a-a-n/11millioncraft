@@ -129,7 +129,7 @@ const SkuManager = () => {
                                 required
                             />
                             <input
-                                type="number"
+                                type="string"
                                 placeholder="VendorPrice"
                                 value={formData.vendorprice}
                                 onChange={(e) => setFormData({ ...formData, vendorprice: e.target.value })}

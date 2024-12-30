@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 function Header() {
-  const [isAdmin, setIsAdmin] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const role = localStorage.getItem('role');
-    setIsAdmin(role === 'Admin');
-  }, []);
+  
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -19,6 +16,8 @@ function Header() {
   };
 
   const token = localStorage.getItem('token');
+  const decoded = jwtDecode(token);
+
 
   return (
     <header className="fixed h-[5vh] py-[8vh] top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10">
@@ -84,20 +83,13 @@ function Header() {
                   SkuGen
                 </NavLink>
               </li>
-              {isAdmin && (
-                <li>
-                  <NavLink
-                    to="/products/form"
-                    className={({ isActive }) =>
-                      `block px-3 py-1.5 text-sm text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                        isActive ? 'border-b-2 border-white' : ''
-                      }`
-                    }
-                  >
-                    Form
-                  </NavLink>
-                </li>
-              )}
+              {decoded.issuperadmin && (<li>
+                <NavLink
+                  to="/superadmin"
+                >
+                  SuperAdmin
+                </NavLink>
+              </li>)}
             </ul>
           </nav>
 
