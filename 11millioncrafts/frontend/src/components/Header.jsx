@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import './Header.css';
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  
+  const token = localStorage.getItem('token');
+  const decoded = token ? jwtDecode(token) : null;
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -15,106 +19,90 @@ function Header() {
     window.location.reload();
   };
 
-  const token = localStorage.getItem('token');
-  const decoded = jwtDecode(token);
-
+  const navigation = [
+    { name: 'Home', href: '/home', current: false },
+    { name: 'Products', href: '/products', current: false },
+    { name: 'SkuGen', href: '/skugen', current: false },
+    decoded?.issuperadmin && { name: 'SuperAdmin', href: '/superadmin', current: false },
+  ].filter(Boolean);
 
   return (
-    <header className="fixed h-[5vh] py-[8vh] top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10">
-      <div className="px-4 sm:px-6">
-        <div className="flex items-center justify-between">
-          <h1 
-            className="text-xl sm:text-2xl font-bold text-white cursor-pointer hover:scale-105 transition-transform duration-200"
-            onClick={() => navigate('/home')}
-          >
-            11millioncraft 
-          </h1>
-
-          <div className="sm:hidden">
-            <button
+    <Disclosure as="nav" className="bg-gray-800 mb-[90vh] fixed w-full top-0 left-0 z-50 backdrop-blur-md border-b border-white/10">
+      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8" id="height">
+        <div className="relative flex h-16 items-center justify-between">
+          {/* Mobile Menu Button */}
+          <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
+            <DisclosureButton
+              className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white p-1.5 hover:bg-white/10 rounded-lg transition-colors duration-200"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
+              <span className="sr-only">Open main menu</span>
+              <Bars3Icon aria-hidden="true" className="block size-6 group-data-[open]:hidden" />
+              <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-[open]:block" />
+            </DisclosureButton>
           </div>
 
-          <nav className={`absolute sm:relative top-full left-0 right-0 bg-black/30 backdrop-blur-md sm:backdrop-blur-none sm:bg-transparent ${isMenuOpen ? 'block' : 'hidden'} sm:block mt-0 sm:mt-0`}>
-            <ul className="flex flex-col sm:flex-row items-center gap-2 p-3 sm:p-0">
-              <li>
-                <NavLink
-                  to="/home"
-                  className={({ isActive }) =>
-                    `block px-3 py-1.5 text-sm text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                      isActive ? 'border-b-2 border-white' : ''
-                    }`
-                  }
-                >
-                  Home
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/products"
-                  className={({ isActive }) =>
-                    `block px-3 py-1.5 text-sm text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                      isActive ? 'border-b-2 border-white' : ''
-                    }`
-                  }
-                >
-                  Products
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/skugen"
-                  className={({ isActive }) =>
-                    `block px-3 py-1.5 text-sm text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                      isActive ? 'border-b-2 border-white' : ''
-                    }`
-                  }
-                >
-                  SkuGen
-                </NavLink>
-              </li>
-              {decoded.issuperadmin && (<li>
-                <NavLink
-                  to="/superadmin"
-                >
-                  SuperAdmin
-                </NavLink>
-              </li>)}
-            </ul>
-          </nav>
+          <div className="flex flex-1 items-center justify-between sm:items-stretch sm:justify-start">
 
-          {token && (
-            <button
-              onClick={handleLogout}
-              className="hidden sm:block px-4 py-1.5 text-sm bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
-            >
-              Logout
-            </button>
-          )}
+            <div className="flex shrink-0 items-center">
+              <h1
+                className="text-xl mr-80 sm:text-2xl font-bold text-white cursor-pointer hover:scale-105 transition-transform duration-200"
+                onClick={() => navigate('/home')}
+              >
+                11millioncraft
+              </h1>
+            </div>
+
+            <div className="hidden sm:block ml-40">
+              <div className="flex space-x-6">
+                {navigation.map((item) => (
+                  <NavLink
+                    key={item.name}
+                    to={item.href}
+                    className={({ isActive }) =>
+                      `px-6 py-2 text-lg text-white hover:text-purple-200 transition-colors duration-200 font-medium ${isActive ? 'border-b-2 border-white' : ''}`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                ))}
+
+
+                <button
+                  onClick={handleLogout}
+                  className="ml-auto px-4 py-2  bg-gray-500 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-
-        {token && isMenuOpen && (
-          <div className="sm:hidden p-3 border-t border-white/10">
-            <button
-              onClick={handleLogout}
-              className="w-full px-4 py-1.5 text-sm bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
-            >
-              Logout
-            </button>
-          </div>
-        )}
       </div>
-    </header>
+
+  
+      <DisclosurePanel className="sm:hidden">
+        <div className="space-y-1 px-2 pb-3 pt-2">
+          {navigation.map((item) => (
+            <DisclosureButton
+              key={item.name}
+              as="a"
+              href={item.href}
+              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-purple-600"
+            >
+              {item.name}
+            </DisclosureButton>
+          ))}
+     
+          <DisclosureButton
+            onClick={handleLogout}
+            className="block rounded-md px-3 py-2 text-base font-medium text-white bg-gray-500 hover:bg-red-700"
+          >
+            Logout
+          </DisclosureButton>
+        </div>
+      </DisclosurePanel>
+    </Disclosure>
   );
 }
 

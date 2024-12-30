@@ -1,0 +1,34 @@
+#height {
+    height: 15vh;
+    display: flex;
+    justify-content: baseline; 
+    align-items: center;     
+     font: size 150px; 
+     font-weight: bold; 
+     color: white;
+  }
+  /* Apply hover effects for navigation links */
+nav .flex .block {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 5px; /* Add some spacing for underline */
+  }
+  
+  nav .flex .block::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: width 0.3s ease, left 0.3s ease;
+  }
+  
+  nav .flex .block:hover::after {
+    width: 100%;
+  }
+  
+  nav .flex .block.active::after {
+    width: 100%;
+  }
