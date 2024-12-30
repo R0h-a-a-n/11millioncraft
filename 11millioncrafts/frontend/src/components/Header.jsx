@@ -28,7 +28,7 @@ function Header() {
             className="text-xl sm:text-2xl font-bold text-white cursor-pointer hover:scale-105 transition-transform duration-200"
             onClick={() => navigate('/home')}
           >
-            11millioncraft
+            11millioncraft 
           </h1>
 
           <div className="sm:hidden">
