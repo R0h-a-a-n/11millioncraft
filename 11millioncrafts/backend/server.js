@@ -7,6 +7,8 @@ const multer = require('multer');
 require('dotenv').config();
 const User = require('./models/User');
 const SuperSchema = require('./models/SuperAdmin');
+const DeletionRequest = require('./models/DeletionRequest');
+const nodemailer = require('nodemailer');
 
 const app = express();
 app.use(express.json());
@@ -43,6 +45,16 @@ const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   productId: { type: String, required: true, unique: true },
   image: { type: String },
+});
+
+
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
 });
 
 const Product = mongoose.model('Product', productSchema);
@@ -308,18 +320,102 @@ app.post('/addsuper',checksuperadmin, async (req,res)=>{
 });
 
 
-app.post('/skudelete',checksuperadmin, async (req,res) =>{
-  try{
-    const {_id} = req.body; 
-    const del = await SKU.findByIdAndDelete(_id);
-    res.status(200).json('deleted');
+app.post('/skudelete', async (req, res) => {
+  try {
+    const { _id, reason } = req.body;
+    const token = req.header('Authorization')?.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
-  }catch(err)
-  {
+    if (decoded.issuperadmin) {
+      // Superadmin can delete directly
+      const del = await SKU.findByIdAndDelete(_id);
+      return res.status(200).json('deleted');
+    }
+
+    // Create deletion request
+    const deletionRequest = new DeletionRequest({
+      skuId: _id,
+      requestedBy: decoded.id,
+      reason: reason
+    });
+    await deletionRequest.save();
+
+    // Send email to superadmin
+    const superAdmins = await SuperSchema.find();
+    const sku = await SKU.findById(_id);
+
+    for (const superAdmin of superAdmins) {
+      await transporter.sendMail({
+        from: process.env.SMTP_USER,
+        to: superAdmin.email,
+        subject: `Product Deletion Request - ${sku.skuCode}`,
+        html: `
+          <h2>Product Deletion Request</h2>
+          <p>A request has been made to delete the following product:</p>
+          <ul>
+            <li>SKU Code: ${sku.skuCode}</li>
+            <li>Product Name: ${sku.productName}</li>
+            <li>Reason: ${reason}</li>
+          </ul>
+          <p>Please review this request in the admin panel.</p>
+        `
+      });
+    }
+
+    res.status(200).json({ message: 'Deletion request submitted for approval' });
+  } catch (err) {
     res.status(400).json(err);
   }
+});
 
-})
+
+
+app.get('/deletion-requests', checksuperadmin, async (req, res) => {
+  try {
+    const requests = await DeletionRequest.find({ status: 'pending' })
+      .populate('skuId')
+      .populate('requestedBy');
+    res.status(200).json(requests);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+// Process deletion request
+app.post('/deletion-requests/:requestId', checksuperadmin, async (req, res) => {
+  try {
+    const { requestId } = req.params;
+    const { status } = req.body;
+    
+    const request = await DeletionRequest.findById(requestId)
+      .populate('skuId')
+      .populate('requestedBy');
+    
+    request.status = status;
+    request.respondedAt = new Date();
+    await request.save();
+
+    if (status === 'approved') {
+      await SKU.findByIdAndDelete(request.skuId._id);
+    }
+
+    // Notify admin of the decision
+    await transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to: request.requestedBy.email,
+      subject: `Product Deletion Request ${status.toUpperCase()}`,
+      html: `
+        <h2>Product Deletion Request ${status.toUpperCase()}</h2>
+        <p>Your request to delete product ${request.skuId.skuCode} has been ${status}.</p>
+        ${status === 'approved' ? '<p>The product has been deleted from the system.</p>' : ''}
+      `
+    });
+
+    res.status(200).json({ message: `Request ${status}` });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

@@ -3,89 +3,89 @@ import {
   ArrowLeft,
   Package,
   MapPin,
-  Truck,
   Building,
   Tag,
-  Calendar,
 } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
+
 import axios from "axios";
+import DeletionRequestModal from "./DeletionRequestModel"; 
 
 const SkuDetail = () => {
   const [skuDetail, setSkuDetail] = useState(null);
   const [vendorproducts, setVendorproducts] = useState([]);
-  const [Issuperadmin, setIssuperadmin] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [showDeletionModal, setShowDeletionModal] = useState(false);
   const { skuCode } = useParams();
   const navigate = useNavigate();
+
   useEffect(() => {
-    const checksuperadmin = () => {
+    const checkSuperAdmin = () => {
       const token = localStorage.getItem("token");
       if (token) {
         try {
           const decoded = jwtDecode(token);
-          setIssuperadmin(decoded.issuperadmin);
+          setIsSuperAdmin(decoded.issuperadmin);
         } catch (err) {
-          console.log(err);
-          setIssuperadmin(false);
+          console.error(err);
+          setIsSuperAdmin(false);
         }
       }
     };
-    checksuperadmin();
+    checkSuperAdmin();
   }, []);
 
-  const handledelete = async (_id) => {
-    const areyasure = window.confirm("do you want to delete this product?");
+  const fetchSkuDetail = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/sku/${skuCode}`);
+      const data = await response.json();
+      setSkuDetail(data);
+
+      if (data.vendorName) {
+        const vendorResponse = await fetch(
+          `http://localhost:5000/vendor/${data.vendorName}/products`
+        );
+        const vendorData = await vendorResponse.json();
+        setVendorproducts(vendorData);
+      }
+    } catch (err) {
+      console.error("Error fetching SKU details:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSkuDetail();
+  }, [skuCode]);
+
+  const handleDeleteRequest = async (reason) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         alert("No token found. Please login again.");
         return;
       }
-      if (areyasure) {
-        const delres = await axios.post(
-          "http://localhost:5000/skudelete",
-          { _id },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
 
-        if (delres.status === 200) {
-          alert("Deleted successfully");
-        } else {
-          alert("Failed to delete. Please try again.");
+      const response = await axios.post(
+        "http://localhost:5000/skudelete",
+        { _id: skuDetail._id, reason },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+
+      if (response.status === 200) {
+        alert(response.data.message || "Deleted successfully");
+        navigate("/products");
       }
     } catch (err) {
-      console.error("Error deleting SKU:", err.message);
-      alert("An error occurred while deleting. Please try again.");
+      console.error("Error:", err.message);
+      alert("An error occurred. Please try again.");
     }
   };
-
-  useEffect(() => {
-    const fetchSkuDetail = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/sku/${skuCode}`);
-        const data = await response.json();
-        setSkuDetail(data);
-
-        if (data.vendorName) {
-          const response = await fetch(
-            `http://localhost:5000/vendor/${data.vendorName}/products`
-          );
-          const vendorData = await response.json();
-          setVendorproducts(vendorData);
-        }
-      } catch (err) {
-        console.error("Error fetching SKU details:", err);
-      }
-    };
-    fetchSkuDetail();
-  }, [skuCode]);
 
   if (!skuDetail) {
     return (
@@ -97,7 +97,7 @@ const SkuDetail = () => {
 
   return (
     <div className="bg-black h-screen w-screen">
-      <div className="mt-[30vh] rounded-lg bg-gradient-to-r from-slate-700 to-slate-400 ">
+      <div className="mt-[30vh] rounded-lg bg-gradient-to-r from-slate-700 to-slate-400">
         <div className="max-w-4xl mx-auto rounded-lg p-6">
           <button
             onClick={() => navigate(-1)}
@@ -112,44 +112,41 @@ const SkuDetail = () => {
               {skuDetail.skuCode}
             </h1>
 
-            <div className="flex gap-5 ml-[65vh] ms-[25vh] ">
+            <div className="flex gap-5 ml-auto">
               <div
                 className="cursor-pointer"
-                onClick={() => {
-                  navigate(`/edit/${skuCode}`);
-                }}
+                onClick={() => navigate(`/edit/${skuCode}`)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="white"
-                  class="size-6"
+                  className="size-6"
                 >
                   <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                   <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
                 </svg>
               </div>
-              <div className="cursor-pointer">
-                <button onClick={() => handledelete(skuDetail._id)}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="white"
-                    class="size-6"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                    />
-                  </svg>
-                </button>
-              </div>
+              <button onClick={() => setShowDeletionModal(true)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="white"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
 
+          {/* Product Details */}
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div className="bg-gray-50 p-4 rounded-lg">
@@ -166,7 +163,7 @@ const SkuDetail = () => {
                 <p className="text-gray-600">
                   Number: {skuDetail.vendorNumber}
                 </p>
-                {Issuperadmin && skuDetail.vendorprice && (
+                {isSuperAdmin && skuDetail.vendorprice && (
                   <p className="text-gray-600">
                     Vendor Price: ₹{skuDetail.vendorprice}
                   </p>
@@ -195,6 +192,7 @@ const SkuDetail = () => {
             </div>
           </div>
 
+          {/* Vendor Products */}
           <div>
             <div className="mt-10">
               {vendorproducts.length > 0 && (
@@ -239,7 +237,7 @@ const SkuDetail = () => {
                                 <p className="text-gray-600">
                                   Product Number: {SKU.productNumber}
                                 </p>
-                                {Issuperadmin && SKU.vendorprice && (
+                                {isSuperAdmin && SKU.vendorprice && (
                                   <p className="text-gray-600">
                                     Vendor Price: ₹{SKU.vendorprice}
                                   </p>
@@ -252,8 +250,9 @@ const SkuDetail = () => {
                                 <div className="flex items-center gap-2">
                                   <Building className="w-4 h-4 text-gray-600" />
                                   <p className="text-gray-600">
-                                    Vendor: {SKU.vendorName} (#
-                                    {SKU.vendorNumber})
+                                    Vendor: {SKU.vendorName} (#{
+                                      SKU.vendorNumber
+                                    })
                                   </p>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -283,6 +282,13 @@ const SkuDetail = () => {
               )}
             </div>
           </div>
+
+          <DeletionRequestModal
+            isOpen={showDeletionModal}
+            onClose={() => setShowDeletionModal(false)}
+            onSubmit={(reason) => handleDeleteRequest(reason)}
+            skuCode={skuDetail.skuCode}
+          />
         </div>
       </div>
     </div>
