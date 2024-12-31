@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Product = () => {
   const [products, setProducts] = useState([]);
@@ -8,11 +8,11 @@ const Product = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/inventory');
+        const response = await fetch("http://localhost:5000/inventory");
         const data = await response.json();
         setProducts(data);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching products:", error);
       }
     };
 
@@ -42,8 +42,8 @@ const Product = () => {
                   alt={product.productName}
                   className="w-full h-[50vh] rounded-t-lg shadow-sm"
                   onError={(e) => {
-                    e.target.src = '/api/placeholder/400/300';
-                    console.error('Error loading image');
+                    e.target.src = "/api/placeholder/400/300";
+                    console.error("Error loading image");
                   }}
                 />
               )}

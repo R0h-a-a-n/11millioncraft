@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SuperAdmin = () => {
   const navigate = useNavigate();
@@ -12,34 +12,44 @@ const SuperAdmin = () => {
   const [error, setError] = useState(null);
 
   const handleDeleteUser = async (_id) => {
-    try {
-      const del = await axios.delete(`http://localhost:5000/${_id}`);
-      if (del.data.message) {
-        toast.success('User deleted successfully');
-        fetchData();
+    const areyasure = window.confirm(
+      "Do you want to delete these crendentials"
+    );
+    if (areyasure) {
+      try {
+        const del = await axios.delete(`http://localhost:5000/${_id}`);
+        if (del.data.message) {
+          toast.success("User deleted successfully");
+          fetchData();
+        }
+      } catch (err) {
+        toast.error("Error deleting user");
       }
-    } catch (err) {
-      toast.error('Error deleting user');
     }
   };
 
   const handleDeleteAdmin = async (_id) => {
-    try {
-      const del = await axios.delete(`http://localhost:5000/admin/${_id}`);
-      if (del.data.message) {
-        toast.success('Admin deleted successfully');
-        fetchAdminData();
+    const areyasure = window.confirm(
+      "Do you want to delete these credentials?"
+    );
+    if (areyasure) {
+      try {
+        const del = await axios.delete(`http://localhost:5000/admin/${_id}`);
+        if (del.data.message) {
+          toast.success("Admin deleted successfully");
+          fetchAdminData();
+        }
+      } catch (err) {
+        toast.error("Error deleting admin");
       }
-    } catch (err) {
-      toast.error('Error deleting admin');
     }
   };
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/superadmin', {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/superadmin", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -49,10 +59,10 @@ const SuperAdmin = () => {
         setUsers(response.data);
         setError(null);
       } else {
-        throw new Error('Expected array of users from API');
+        throw new Error("Expected array of users from API");
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'An unexpected error occurred');
+      setError(err.response?.data?.message || "An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -61,8 +71,8 @@ const SuperAdmin = () => {
   const fetchAdminData = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/superdetails', {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/superdetails", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -72,10 +82,10 @@ const SuperAdmin = () => {
         setAdmins(response.data);
         setError(null);
       } else {
-        throw new Error('Expected array of admins from API');
+        throw new Error("Expected array of admins from API");
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'An unexpected error occurred');
+      setError(err.response?.data?.message || "An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -109,13 +119,13 @@ const SuperAdmin = () => {
           <h1 className="text-3xl font-bold text-white">Super Admin Panel</h1>
           <div className="flex flex-col sm:flex-row gap-4">
             <button
-              onClick={() => navigate('/signup')}
+              onClick={() => navigate("/signup")}
               className="px-4 py-2 bg-gray-800 text-gray-100 rounded-lg shadow hover:bg-gray-700 transition-colors duration-200"
             >
               Add Admin
             </button>
             <button
-              onClick={() => navigate('/addsuper')}
+              onClick={() => navigate("/addsuper")}
               className="px-4 py-2 bg-gray-800 text-gray-100 rounded-lg shadow hover:bg-gray-700 transition-colors duration-200"
             >
               Add SuperAdmin
@@ -145,12 +155,15 @@ const SuperAdmin = () => {
               </thead>
               <tbody className="divide-y divide-gray-700">
                 {users.map((user) => (
-                  <tr key={user._id} className="hover:bg-gray-700 transition-colors duration-200">
+                  <tr
+                    key={user._id}
+                    className="hover:bg-gray-700 transition-colors duration-200"
+                  >
                     <td className="px-4 py-4 whitespace-nowrap text-md text-gray-100">
-                      {user.username || 'N/A'}
+                      {user.username || "N/A"}
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-md text-gray-100">
-                      {user.email || 'N/A'}
+                      {user.email || "N/A"}
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-center">
                       <button
@@ -167,7 +180,9 @@ const SuperAdmin = () => {
           </div>
         )}
 
-        <h2 className="text-xl font-semibold text-gray-200 mb-4">SuperAdmins</h2>
+        <h2 className="text-xl font-semibold text-gray-200 mb-4">
+          SuperAdmins
+        </h2>
         {admins.length === 0 ? (
           <div className="bg-gray-800 rounded-lg shadow p-6 text-center">
             <p className="text-gray-400 text-lg">No admins found</p>
@@ -190,12 +205,15 @@ const SuperAdmin = () => {
               </thead>
               <tbody className="divide-y divide-gray-700">
                 {admins.map((admin) => (
-                  <tr key={admin._id} className="hover:bg-gray-700 transition-colors duration-200">
+                  <tr
+                    key={admin._id}
+                    className="hover:bg-gray-700 transition-colors duration-200"
+                  >
                     <td className="px-4 py-4 whitespace-nowrap text-md text-gray-100">
-                      {admin.username || 'N/A'}
+                      {admin.username || "N/A"}
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-md text-gray-100">
-                      {admin.email || 'N/A'}
+                      {admin.email || "N/A"}
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-center">
                       <button
