@@ -33,9 +33,8 @@ const Form = () => {
       setMessage(response.data.message || 'Product added successfully!');
       setProductName('');
       setProductId('');
-      setImage(null); // Reset the image state after upload
+      setImage(null); 
     } catch (error) {
-      // Log more error details for debugging
       if (error.response) {
         console.error('Error response:', error.response);
         setMessage(`Error: ${error.response.data.message || 'Error adding product. Please try again.'}`);
