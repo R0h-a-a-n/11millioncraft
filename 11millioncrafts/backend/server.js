@@ -381,7 +381,7 @@ app.get('/deletion-requests', checksuperadmin, async (req, res) => {
   }
 });
 
-// Process deletion request
+
 app.post('/deletion-requests/:requestId', checksuperadmin, async (req, res) => {
   try {
     const { requestId } = req.params;
@@ -399,7 +399,7 @@ app.post('/deletion-requests/:requestId', checksuperadmin, async (req, res) => {
       await SKU.findByIdAndDelete(request.skuId._id);
     }
 
-    // Notify admin of the decision
+    
     await transporter.sendMail({
       from: process.env.SMTP_USER,
       to: request.requestedBy.email,
