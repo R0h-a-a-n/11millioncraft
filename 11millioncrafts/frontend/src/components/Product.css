@@ -64,19 +64,11 @@ header {
 .product-card img {
   width: 100%;
   height: 200px; 
-<<<<<<< HEAD
-  object-fit: contain; /* Ensures image maintains aspect ratio */
-=======
   object-fit: contain; 
->>>>>>> ab94c2ba431b84cca897bf16f6ba3b0ebea51042
   border-radius: 8px;
   margin-bottom: 15px;
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ab94c2ba431b84cca897bf16f6ba3b0ebea51042
 .product-card h3 {
   margin: 0 0 8px 0;
   font-size: 18px;
@@ -84,20 +76,12 @@ header {
   font-weight: 600;
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ab94c2ba431b84cca897bf16f6ba3b0ebea51042
 .product-card p {
   font-size: 14px;
   color: #666;
   margin: 0;
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> ab94c2ba431b84cca897bf16f6ba3b0ebea51042
 @media screen and (max-width: 1200px) {
   .product-row {
       grid-template-columns: repeat(3, 1fr); 
@@ -106,21 +90,13 @@ header {
 
 @media screen and (max-width: 900px) {
   .product-row {
-<<<<<<< HEAD
-      grid-template-columns: repeat(2, 1fr);
-=======
       grid-template-columns: repeat(2, 1fr); 
->>>>>>> ab94c2ba431b84cca897bf16f6ba3b0ebea51042
   }
 }
 
 @media screen and (max-width: 600px) {
   .product-row {
-<<<<<<< HEAD
-      grid-template-columns: 1fr; 
-=======
       grid-template-columns: 1fr;
->>>>>>> ab94c2ba431b84cca897bf16f6ba3b0ebea51042
   }
   
   .product-container {

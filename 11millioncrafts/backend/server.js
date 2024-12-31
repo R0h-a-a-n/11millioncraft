@@ -35,7 +35,7 @@ const skuSchema = new mongoose.Schema({
   cityCode: { type: Number, required: true },
   skuCode: { type: String, required: true, unique: true },
   photo: { type: String, required: true },
-  vendorprice: { type: Number },
+  vendorprice: { type: String },
 });
 
 const SKU = mongoose.model('SKU', skuSchema);
@@ -193,7 +193,7 @@ app.put('/edit/:skuCode', async (req, res) => {
 });
 
 
-app.post('/adduser', async (req, res) => {
+app.post('/adduser',checksuperadmin, async (req, res) => {
   try {
     const { email, password, username } = req.body;
     if (!email || !password || !username) {
@@ -260,6 +260,16 @@ app.get('/superadmin', checksuperadmin,async (req, res) => {
     res.status(400).json({ message: 'Error fetching users', error: err.message });
   }
 });
+app.get('/superdetails', checksuperadmin,async (req, res) => {
+  try {
+    const response = await SuperSchema.find();
+    console.log('Fetched users successfully');
+    res.status(200).json(response);
+  } catch (err) {
+    console.error('Error fetching users:', err.message);
+    res.status(400).json({ message: 'Error fetching users', error: err.message });
+  }
+});
 
 app.delete('/:_id', async (req, res) => {
   try {
@@ -270,16 +280,25 @@ app.delete('/:_id', async (req, res) => {
     res.status(400).json({ message: 'Error deleting user', error: err.message });
   }
 });
+app.delete('/admin/:_id', async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const message = await SuperSchema.findByIdAndDelete({ _id });
+    res.status(200).json({ message: 'User deleted' });
+  } catch (err) {
+    res.status(400).json({ message: 'Error deleting user', error: err.message });
+  }
+});
 
-app.post('/addsuper', async (req,res)=>{
+app.post('/addsuper',checksuperadmin, async (req,res)=>{
 
   try {
-    const { email, password} = req.body;
-    if (!email || !password ) {
+    const { email, password,username} = req.body;
+    if (!email || !password|| !username ) {
       return res.status(400).json({ message: 'Email and  password are required!' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new SuperSchema({ email, password: hashedPassword });
+    const newUser = new SuperSchema({ email, password: hashedPassword,username });
     await newUser.save();
     res.status(200).json({ message: 'User created successfully!', user: { email } });
   } catch (err) {

@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import './Header.css';
 
 function Header() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const role = localStorage.getItem('role');
-    setIsAdmin(role === 'Admin');
-  }, []);
+  const token = localStorage.getItem('token');
+  const decoded = token ? jwtDecode(token) : null;
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -17,78 +19,91 @@ function Header() {
     window.location.reload();
   };
 
+  const navigation = [
+    { name: 'Home', href: '/home', current: false },
+    { name: 'Products', href: '/products', current: false },
+    { name: 'SkuGen', href: '/skugen', current: false },
+    decoded?.issuperadmin && { name: 'SuperAdmin', href: '/superadmin', current: false },
+  ].filter(Boolean);
+
   return (
-    <header className="bg-gradient-to-r from-purple-400/90 to-blue-500/50 backdrop-blur-sm h-[10vh] px-6 py-2 h-[15vh] shadow-lg">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between h-full">
-        <div className="mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold cursor-pointer text-white tracking-wide hover:scale-105 transition-transform duration-200" onClick={()=>navigate('/home')}>
-            11millioncraft
-          </h1>
-        </div>
+    <Disclosure as="nav" className="bg-gray-800 mb-[90vh] fixed w-full top-0 left-0 z-50 backdrop-blur-md border-b border-white/10">
+      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8" id="height">
+        <div className="relative flex h-16 items-center justify-between">
+          <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
+            <DisclosureButton
+              className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <span className="sr-only">Open main menu</span>
+              <Bars3Icon aria-hidden="true" className="block size-6 group-data-[open]:hidden" />
+              <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-[open]:block" />
+            </DisclosureButton>
+          </div>
 
-        <nav className="flex-grow md:mx-6">
-          <ul className="flex flex-wrap justify-center items-center gap-4 md:gap-6">
-            <li>
-              <NavLink 
-                to="/home" 
-                className={({ isActive }) => 
-                  `text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                    isActive ? 'border-b-2 border-white' : ''
-                  }`
-                }
+          <div className="flex flex-1 items-center justify-between sm:items-stretch sm:justify-start">
+
+            <div className="flex shrink-0 items-center">
+              <h1
+                className="text-xl mr-80 sm:text-2xl font-bold text-white cursor-pointer hover:scale-105 transition-transform duration-200"
+                onClick={() => navigate('/home')}
               >
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink 
-                to="/products"
-                className={({ isActive }) => 
-                  `text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                    isActive ? 'border-b-2 border-white' : ''
-                  }`
-                }
-              >
-                Products
-              </NavLink>
-            </li>
-            <li>
-              <NavLink 
-                to="/skugen"
-                className={({ isActive }) => 
-                  `text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                    isActive ? 'border-b-2 border-white' : ''
-                  }`
-                }
-              >
-                SkuGen
-              </NavLink>
-            </li>
-            {isAdmin && (
-              <li>
-                <NavLink 
-                  to="/products/form"
-                  className={({ isActive }) => 
-                    `text-white hover:text-purple-200 transition-colors duration-200 font-medium ${
-                      isActive ? 'border-b-2 border-white' : ''
-                    }`
-                  }
+                11millioncraft
+              </h1>
+            </div>
+
+            <div className="hidden sm:block ml-40">
+              <div className="flex space-x-6">
+                {navigation.map((item) => (
+                  <NavLink
+                    key={item.name}
+                    to={item.href}
+                    className={({ isActive }) =>
+                      `px-6 py-2 text-lg text-white hover:text-purple-200 transition-colors duration-200 font-medium ${isActive ? 'border-b-2 border-white' : ''}`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                ))}
+
+              {token && (<button
+                  onClick={handleLogout}
+                  className="ml-auto px-4 py-2  bg-gray-500 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
                 >
-                  Form
-                </NavLink>
-              </li>
-            )}
-          </ul>
-        </nav>
+                  Logout
+                </button>)}
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <button 
+  
+      <DisclosurePanel className="sm:hidden">
+        <div className="space-y-1 px-2 pb-3 pt-2">
+          {navigation.map((item) => (
+            <DisclosureButton
+              key={item.name}
+              as="a"
+              href={item.href}
+              className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-purple-600"
+            >
+              {item.name}
+            </DisclosureButton>
+          ))}
+         {token && (
+          <DisclosureButton
           onClick={handleLogout}
-          className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+          className="block rounded-md px-3 py-2 text-base font-medium text-white bg-gray-500 hover:bg-red-700"
         >
           Logout
-        </button>
-      </div>
-    </header>
+        </DisclosureButton>
+      
+         )}
+          </div>
+      </DisclosurePanel>
+    </Disclosure>
   );
 }
 
