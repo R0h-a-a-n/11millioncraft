@@ -193,7 +193,7 @@ app.put('/edit/:skuCode', async (req, res) => {
 });
 
 
-app.post('/adduser', async (req, res) => {
+app.post('/adduser',checksuperadmin, async (req, res) => {
   try {
     const { email, password, username } = req.body;
     if (!email || !password || !username) {

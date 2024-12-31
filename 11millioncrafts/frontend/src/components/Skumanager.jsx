@@ -79,14 +79,14 @@ const SkuManager = () => {
     };
 
     return (
-        <div className="min-h-screen mt-[30vh] w-[100%]  max-w-screen">
+        <div className="min-h-screen mt-[50vh] w-[100%] max-w-screen">
             <div className="max-w-7xl mx-auto grid gap-6 p-10   lg:grid-cols-3">
                 <div className="rounded-lg p-6 ">
                     <h2 className="text-2xl font-semibold flex items-center gap-2 mb-4">
-                        <Plus className="w-6 h-6" />
+                        <Plus className="w-6 h-6 " />
                         Add SKU
                     </h2>
-                    <form onSubmit={handleSubmit} className="space-y-9 p-10 bg-white/20">
+                    <form onSubmit={handleSubmit} className="space-y-9  p-10 bg-white/20">
                         <div className="grid gap-3">
                             <input
                                 type="text"

@@ -66,13 +66,13 @@ function Header() {
                   </NavLink>
                 ))}
 
-
-                <button
+              {token && (<button
                   onClick={handleLogout}
                   className="ml-auto px-4 py-2  bg-gray-500 text-white rounded-md hover:bg-red-700 transition-colors duration-200"
                 >
                   Logout
-                </button>
+                </button>)}
+                
               </div>
             </div>
           </div>
@@ -92,14 +92,16 @@ function Header() {
               {item.name}
             </DisclosureButton>
           ))}
-     
+         {token && (
           <DisclosureButton
-            onClick={handleLogout}
-            className="block rounded-md px-3 py-2 text-base font-medium text-white bg-gray-500 hover:bg-red-700"
-          >
-            Logout
-          </DisclosureButton>
-        </div>
+          onClick={handleLogout}
+          className="block rounded-md px-3 py-2 text-base font-medium text-white bg-gray-500 hover:bg-red-700"
+        >
+          Logout
+        </DisclosureButton>
+      
+         )}
+          </div>
       </DisclosurePanel>
     </Disclosure>
   );

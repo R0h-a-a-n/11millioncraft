@@ -24,7 +24,7 @@ const Product = () => {
   };
 
   return (
-    <div className="min-h-screen w-screen  mt-[160vh] bg-gradient-to-b from-gray-800 via-gray-900 to-gray-800 text-white flex flex-col">
+    <div className="min-h-screen w-screen mt-[90vh] bg-gradient-to-b from-gray-800 via-gray-900 to-gray-800 text-white flex flex-col">
       <div className="flex flex-col items-center justify-center flex-grow p-8">
         <h2 className="mb-8 text-4xl sm:text-5xl font-bold text-center text-blue-300">
           Our Products
