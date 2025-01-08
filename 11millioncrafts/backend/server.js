@@ -327,12 +327,11 @@ app.post('/skudelete', async (req, res) => {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
     if (decoded.issuperadmin) {
-      // Superadmin can delete directly
       const del = await SKU.findByIdAndDelete(_id);
       return res.status(200).json('deleted');
     }
 
-    // Create deletion request
+ 
     const deletionRequest = new DeletionRequest({
       skuId: _id,
       requestedBy: decoded.id,
@@ -340,7 +339,7 @@ app.post('/skudelete', async (req, res) => {
     });
     await deletionRequest.save();
 
-    // Send email to superadmin
+    
     const superAdmins = await SuperSchema.find();
     const sku = await SKU.findById(_id);
 

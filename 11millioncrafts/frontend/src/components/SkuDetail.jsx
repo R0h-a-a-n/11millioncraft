@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  ArrowLeft,
-  Package,
-  MapPin,
-  Building,
-  Tag,
-} from "lucide-react";
+import { ArrowLeft, Package, MapPin, Building, Tag } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 import axios from "axios";
-import DeletionRequestModal from "./DeletionRequestModel"; 
+import DeletionRequestModal from "./DeletionRequestModel";
 
 const SkuDetail = () => {
   const [skuDetail, setSkuDetail] = useState(null);
@@ -82,7 +76,7 @@ const SkuDetail = () => {
         navigate("/products");
       }
     } catch (err) {
-      console.error("Error:", err.message);
+      console.error("Error:", err.message || err || err.response);
       alert("An error occurred. Please try again.");
     }
   };
@@ -191,8 +185,6 @@ const SkuDetail = () => {
               )}
             </div>
           </div>
-
-          {/* Vendor Products */}
           <div>
             <div className="mt-10">
               {vendorproducts.length > 0 && (
@@ -250,9 +242,8 @@ const SkuDetail = () => {
                                 <div className="flex items-center gap-2">
                                   <Building className="w-4 h-4 text-gray-600" />
                                   <p className="text-gray-600">
-                                    Vendor: {SKU.vendorName} (#{
-                                      SKU.vendorNumber
-                                    })
+                                    Vendor: {SKU.vendorName} (#
+                                    {SKU.vendorNumber})
                                   </p>
                                 </div>
                                 <div className="flex items-center gap-2">
