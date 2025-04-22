@@ -21,7 +21,7 @@ const Edit = () => {
     const fetchSkuData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/sku/${skuCode}`
+          `https://one1millioncraft-backend.onrender.com/sku/${skuCode}`
         );
         setFormData(response.data);
       } catch (error) {
@@ -47,7 +47,10 @@ const Edit = () => {
       delete updatedData.skuCode;
       const token = localStorage.getItem("token");
       if (token) {
-        await axios.put(`http://localhost:5000/edit/${skuCode}`, updatedData);
+        await axios.put(
+          `https://one1millioncraft-backend.onrender.com/edit/${skuCode}`,
+          updatedData
+        );
         toast.success("SKU updated successfully!");
       }
       setTimeout(() => {

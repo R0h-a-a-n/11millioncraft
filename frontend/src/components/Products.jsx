@@ -8,7 +8,9 @@ const Product = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:5000/inventory");
+        const response = await fetch(
+          "https://one1millioncraft-backend.onrender.com/inventory"
+        );
         const data = await response.json();
         setProducts(data);
       } catch (error) {
@@ -38,7 +40,7 @@ const Product = () => {
             >
               {product.photo && (
                 <img
-                  src={`http://localhost:5000/${product.photo}`}
+                  src={`https://one1millioncraft-backend.onrender.com/${product.photo}`}
                   alt={product.productName}
                   className="w-full h-[50vh] rounded-t-lg shadow-sm"
                   onError={(e) => {

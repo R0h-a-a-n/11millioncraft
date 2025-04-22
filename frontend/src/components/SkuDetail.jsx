@@ -33,13 +33,15 @@ const SkuDetail = () => {
 
   const fetchSkuDetail = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/sku/${skuCode}`);
+      const response = await fetch(
+        `https://one1millioncraft-backend.onrender.com/sku/${skuCode}`
+      );
       const data = await response.json();
       setSkuDetail(data);
 
       if (data.vendorName) {
         const vendorResponse = await fetch(
-          `http://localhost:5000/vendor/${data.vendorName}/products`
+          `https://one1millioncraft-backend.onrender.com/vendor/${data.vendorName}/products`
         );
         const vendorData = await vendorResponse.json();
         setVendorproducts(vendorData);
@@ -62,7 +64,7 @@ const SkuDetail = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:5000/skudelete",
+        "https://one1millioncraft-backend.onrender.com/skudelete",
         { _id: skuDetail._id, reason },
         {
           headers: {
@@ -174,7 +176,7 @@ const SkuDetail = () => {
               <h2 className="font-medium text-gray-700 mb-3">Product Image</h2>
               {skuDetail.photo && (
                 <img
-                  src={`http://localhost:5000/${skuDetail.photo}`}
+                  src={`https://one1millioncraft-backend.onrender.com/${skuDetail.photo}`}
                   alt={skuDetail.productName}
                   className="w-full h-auto rounded-lg shadow-sm"
                   onError={(e) => {
@@ -256,7 +258,7 @@ const SkuDetail = () => {
 
                               {SKU.photo && (
                                 <img
-                                  src={`http://localhost:5000/${SKU.photo}`}
+                                  src={`https://one1millioncraft-backend.onrender.com/${SKU.photo}`}
                                   alt={SKU.productName}
                                   className="w-full h-48 object-cover rounded-lg shadow-sm"
                                   onError={(e) => {

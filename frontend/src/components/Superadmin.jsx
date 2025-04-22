@@ -17,7 +17,7 @@ const SuperAdmin = () => {
     );
     if (areyasure) {
       try {
-        const del = await axios.delete(`http://localhost:5000/${_id}`);
+        const del = await axios.delete(`https://one1millioncraft-backend.onrender.com/${_id}`);
         if (del.data.message) {
           toast.success("User deleted successfully");
           fetchData();
@@ -34,7 +34,7 @@ const SuperAdmin = () => {
     );
     if (areyasure) {
       try {
-        const del = await axios.delete(`http://localhost:5000/admin/${_id}`);
+        const del = await axios.delete(`https://one1millioncraft-backend.onrender.com/admin/${_id}`);
         if (del.data.message) {
           toast.success("Admin deleted successfully");
           fetchAdminData();
@@ -49,7 +49,7 @@ const SuperAdmin = () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/superadmin", {
+      const response = await axios.get("https://one1millioncraft-backend.onrender.com/superadmin", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -72,7 +72,7 @@ const SuperAdmin = () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/superdetails", {
+      const response = await axios.get("https://one1millioncraft-backend.onrender.com/superdetails", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

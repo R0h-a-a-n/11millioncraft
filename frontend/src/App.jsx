@@ -1,32 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import LandingPage from './components/Landingpage';
-import Signup from './components/signup';
-import Login from './components/login';
-import Home from './components/Home';
-import Products from './components/Products';
-import Header from './components/Header';
-import Form from './components/Form';
-import SkuManager from './components/Skumanager';
-import SkuDetail from './components/SkuDetail';
-import Edit from './components/Edit';
-import { ToastContainer,toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Superadmin from './components/superadmin';
-import Superlogin from './components/Superlogin';
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import LandingPage from "./components/Landingpage";
+import Signup from "./components/Signup";
+import Login from "./components/login";
+import Home from "./components/Home";
+import Products from "./components/Products";
+import Header from "./components/Header";
+import Form from "./components/Form";
+import SkuManager from "./components/Skumanager";
+import SkuDetail from "./components/SkuDetail";
+import Edit from "./components/Edit";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Superadmin from "./components/Superadmin";
+import Superlogin from "./components/Superlogin";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
-    () => localStorage.getItem('isLoggedIn') === 'true' 
+    () => localStorage.getItem("isLoggedIn") === "true"
   );
 
   useEffect(() => {
-
-    localStorage.setItem('isLoggedIn', isLoggedIn);
+    localStorage.setItem("isLoggedIn", isLoggedIn);
   }, [isLoggedIn]);
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
     }
@@ -39,11 +43,12 @@ function App() {
   return (
     <Router>
       <Routes>
-
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-
+        <Route
+          path="/login"
+          element={<Login setIsLoggedIn={setIsLoggedIn} />}
+        />
 
         <Route
           path="/home"
@@ -70,7 +75,6 @@ function App() {
             <ProtectedRoute>
               <Header />
               <Form />
-
             </ProtectedRoute>
           }
         />
@@ -78,8 +82,8 @@ function App() {
           path="/skugen"
           element={
             <ProtectedRoute>
-              <Header/>
-              <SkuManager/>
+              <Header />
+              <SkuManager />
             </ProtectedRoute>
           }
         />
@@ -87,17 +91,17 @@ function App() {
           path="/sku/:skuCode"
           element={
             <ProtectedRoute>
-              <Header/>
-              <SkuDetail/>
+              <Header />
+              <SkuDetail />
             </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/edit/:skuCode"
           element={
             <ProtectedRoute>
-              <Header/>
-              <Edit/>
+              <Header />
+              <Edit />
             </ProtectedRoute>
           }
         />
@@ -105,8 +109,8 @@ function App() {
           path="/superadmin"
           element={
             <ProtectedRoute>
-              <Header/>
-              <Superadmin/>
+              <Header />
+              <Superadmin />
             </ProtectedRoute>
           }
         />
@@ -114,12 +118,11 @@ function App() {
           path="/addsuper"
           element={
             <ProtectedRoute>
-              <Superlogin/>
+              <Superlogin />
             </ProtectedRoute>
           }
         />
-        </Routes>
-        
+      </Routes>
     </Router>
   );
 }

@@ -19,7 +19,7 @@ const Superlogin = () => {
       }
 
       const response = await axios.post(
-        'http://localhost:5000/addsuper',
+        'https://one1millioncraft-backend.onrender.com/addsuper',
         form,
         {
           headers: {

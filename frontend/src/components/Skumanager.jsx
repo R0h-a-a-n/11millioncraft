@@ -28,7 +28,7 @@ const SkuManager = () => {
         formDataObj.append('photo', formData.photo);
         formDataObj.append('vendorprice',formData.vendorprice);
         try {
-            const response = await fetch('http://localhost:5000/api/skus', {
+            const response = await fetch('https://one1millioncraft-backend.onrender.com/api/skus', {
                 method: 'POST',
                 body: formDataObj,
             });
@@ -52,7 +52,7 @@ const SkuManager = () => {
     useEffect(() => {
         const fetchSkus = async () => {
             try {
-                const response = await fetch('http://localhost:5000/getsku');
+                const response = await fetch('https://one1millioncraft-backend.onrender.com/getsku');
                 const data = await response.json();
                 setSkus(data);
                 setFilteredSkus(data);
