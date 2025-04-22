@@ -105,7 +105,7 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server error!' });
   }
-});
+});//added
 
 app.get('/inventory', async (req, res) => {
   try {
