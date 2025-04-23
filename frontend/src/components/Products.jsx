@@ -40,7 +40,7 @@ const Product = () => {
             >
               {product.photo && (
                 <img
-                  src={`https://one1millioncraft-backend.onrender.com/${product.photo}`}
+                  src={`https://one1millioncraft-backend.onrender.com/uploads/${product.photo}`}
                   alt={product.productName}
                   className="w-full h-[50vh] rounded-t-lg shadow-sm"
                   onError={(e) => {
