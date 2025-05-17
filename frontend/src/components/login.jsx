@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import inventImage from "../assets/invent.jpg";
+import inventimage from "../assets/sstock.jpg";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 
@@ -37,9 +39,12 @@ const Login = () => {
 
   return (
     <div className="shadow-lg">
-      <div className=" p-[100vh] bg-gradient-to-r from-gray-900 to-transparent  backdrop-blur-lg">
-        <form onSubmit={handleSubmit} className="bg-white/20">
-          <label htmlFor="mail" className="text-2xl">
+      <div
+        className="p-[100vh] bg-cover bg-center backdrop-blur-lg"
+        style={{ backgroundImage: `url(${inventimage})` }}
+      >
+        <form onSubmit={handleSubmit} className="bg-black/50">
+          <label htmlFor="mail" className="text-2xl text-white">
             Email
           </label>
           <input
@@ -50,7 +55,7 @@ const Login = () => {
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
-          <label htmlFor="password" className="text-2xl">
+          <label htmlFor="password" className="text-2xl text-white">
             Password
           </label>
           <input
@@ -68,6 +73,12 @@ const Login = () => {
             Login
           </button>
         </form>
+        <button
+          onClick={() => navigate("/home")}
+          className="px-20 mt-4 py-2 text-white rounded-lg bg-black text-gray-700 hover:bg-green-200 hover:text-black transition-colors duration-200 shadow-sm hover:shadow-md"
+        >
+          HOME
+        </button>
       </div>
     </div>
   );
