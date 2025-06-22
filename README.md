@@ -54,7 +54,7 @@ This project enhanced my skills in:
 
 ---
 
-## 🙏 Acknowledgements
+## 🤝 Acknowledgements
 
 Big thanks to **11Milliondream Consultancy Services** for the guidance and support throughout the development journey.
 
